@@ -1,14 +1,28 @@
 import { useState, type FormEvent, type ReactElement } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store";
 import { Button } from "@/components/ui/Button";
 
 export default function SignupPage(): ReactElement {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const register = useAuthStore((state) => state.register);
+  const loading = useAuthStore((state) => state.loading);
 
-  function onSubmit(e: FormEvent<HTMLFormElement>): void {
+  async function onSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
+    setSubmitError(null);
+
+    const success = await register(name.trim(), email.trim(), password);
+    if (!success) {
+      setSubmitError("Unable to create account with those details.");
+      return;
+    }
+
+    navigate("/login", { replace: true });
   }
 
   return (
@@ -76,7 +90,7 @@ export default function SignupPage(): ReactElement {
                 />
               </label>
               <div className="flex flex-col gap-4">
-                <Button type="submit" variant="sale" className="w-full py-4">
+                <Button type="submit" variant="sale" className="w-full py-4" disabled={loading}>
                   Create Account
                 </Button>
                 <button
@@ -112,6 +126,11 @@ export default function SignupPage(): ReactElement {
                     Log in
                   </Link>
                 </p>
+                {submitError ? (
+                  <p className="font-sans text-title-14 text-sale" role="alert">
+                    {submitError}
+                  </p>
+                ) : null}
               </div>
             </form>
           </div>

@@ -48,6 +48,7 @@ export async function apiJson<T>(
   const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
   const response = await fetch(url, {
     ...init,
+    credentials: "include",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

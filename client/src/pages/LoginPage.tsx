@@ -1,12 +1,29 @@
 import { useState, type FormEvent, type ReactElement } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store";
 import { Button } from "@/components/ui/Button";
 
 export default function LoginPage(): ReactElement {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const login = useAuthStore((state) => state.login);
+  const loading = useAuthStore((state) => state.loading);
 
-  function onSubmit(e: FormEvent<HTMLFormElement>): void {
+  async function onSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
+    setSubmitError(null);
+
+    const success = await login(email.trim(), password);
+    if (!success) {
+      setSubmitError("Unable to login with these credentials.");
+      return;
+    }
+
+    const state = location.state as { from?: string } | null;
+    navigate(state?.from ?? "/account", { replace: true });
   }
 
   return (
@@ -52,13 +69,18 @@ export default function LoginPage(): ReactElement {
               />
             </label>
             <div className="mt-2 flex items-center justify-between gap-6">
-              <Button type="submit" variant="sale" className="min-w-[143px] px-12 py-4">
+              <Button type="submit" variant="sale" className="min-w-[143px] px-12 py-4" disabled={loading}>
                 Log In
               </Button>
               <button type="button" className="font-sans text-title-16 text-sale">
                 Forget Password?
               </button>
             </div>
+            {submitError ? (
+              <p className="font-sans text-title-14 text-sale" role="alert">
+                {submitError}
+              </p>
+            ) : null}
           </form>
           </div>
         </div>

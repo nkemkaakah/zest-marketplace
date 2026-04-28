@@ -1,15 +1,36 @@
-import { useState, type ReactElement } from "react";
+import { useEffect, useMemo, useState, type ReactElement } from "react";
+import { useAuthStore } from "@/store";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Button } from "@/components/ui/Button";
 
 export default function AccountPage(): ReactElement {
-  const [firstName, setFirstName] = useState("Md");
-  const [lastName, setLastName] = useState("Rimel");
-  const [mail, setMail] = useState("rimell111@gmail.com");
-  const [address, setAddress] = useState("Kingston, 5236, United State");
+  const user = useAuthStore((state) => state.user);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [mail, setMail] = useState("");
+  const [address, setAddress] = useState("");
   const [currentPwd, setCurrentPwd] = useState("");
   const [newPwd, setNewPwd] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const fullName = user.fullName?.trim() ?? "";
+    const [rawFirstName, ...restNames] = fullName.split(/\s+/).filter(Boolean);
+    setFirstName(rawFirstName ?? "");
+    setLastName(restNames.join(" "));
+    setMail(user.email);
+  }, [user]);
+
+  const welcomeName = useMemo(() => {
+    if (user?.fullName && user.fullName.trim().length > 0) {
+      return user.fullName;
+    }
+    return user?.email ?? "User";
+  }, [user]);
 
   return (
     <div className="mx-auto w-full px-4 py-20 lg:px-site">
@@ -22,7 +43,7 @@ export default function AccountPage(): ReactElement {
       />
       <div className="mt-8 flex justify-end">
         <p className="font-sans text-title-14 text-fg">
-          Welcome! <span className="text-sale">Md Rimel</span>
+          Welcome! <span className="text-sale">{welcomeName}</span>
         </p>
       </div>
 
@@ -79,9 +100,7 @@ export default function AccountPage(): ReactElement {
                 name="email"
                 type="email"
                 value={mail}
-                onChange={(e) => {
-                  setMail(e.target.value);
-                }}
+                readOnly
                 className="h-[50px] rounded-control bg-surface-muted px-4 font-sans text-title-16 text-fg outline-none"
               />
             </label>

@@ -1,5 +1,6 @@
 import { lazy, Suspense, type ReactElement } from "react";
 import { Route, Routes } from "react-router-dom";
+import { RequireAuth } from "@/components/auth/RequireAuth";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { PageSpinner } from "@/components/layout/PageSpinner";
 
@@ -29,7 +30,14 @@ export default function App(): ReactElement {
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
           <Route path="wishlist" element={<WishlistPage />} />
-          <Route path="account" element={<AccountPage />} />
+          <Route
+            path="account"
+            element={
+              <RequireAuth>
+                <AccountPage />
+              </RequireAuth>
+            }
+          />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />

@@ -3,12 +3,41 @@ description: TypeScript, API, env, components, DRY, and testing standards
 alwaysApply: true
 ---
 
-# Code standards
+# Code Standards
 
-- No `any` in TypeScript.
-- All API calls go through `src/services/` only.
-- All secrets via `.env` — never hardcoded.
-- Reuse components from `src/components/` before creating new ones.
-- Follow DRY — extract repeated logic into hooks or utils.
-- Write unit tests for every new component or utility.
-- No need ot run lint or build or migration/databse commands
+## Core Principle
+Always find the **simplest, most minimal correct solution** before writing any code.
+Before implementing anything, ask: "What is the least amount of code that solves this correctly?"
+Prefer editing existing code over adding new code. Prefer small, focused changes over rewrites.
+
+## TypeScript
+- No `any` — ever. Use `unknown` and narrow it, or define a proper type.
+- All API response shapes must have a typed interface in `src/types/`.
+- Infer types where possible — don't declare what TypeScript can already figure out.
+
+## API Calls
+- All HTTP calls go through `src/services/` only — never `fetch` or `axios` directly in a component or hook.
+- Services return typed data or throw a typed error — no raw response objects leaked upward.
+
+## Components
+- Before creating a new component, check `src/components/` — reuse or extend what exists.
+- A component does one thing. If it needs a comment to explain what it does, split it.
+- No inline styles — Tailwind classes only.
+
+## DRY
+- Any logic used more than once goes into `src/hooks/` (React logic) or `src/utils/` (pure functions).
+- Any repeated JSX pattern becomes a component.
+- Never copy-paste — abstract first.
+
+## Environment & Secrets
+- All config via `.env` — no hardcoded URLs, keys, or credentials anywhere.
+- Access env vars only through a single `src/config/env.ts` file — never `process.env` or `import.meta.env` scattered across files.
+
+## Testing
+- Write a unit test for every new component and every utility function.
+- Test behaviour, not implementation — assert what the user sees or what the function returns.
+
+## What Not to Do
+- Do not run lint, build, migration, or database commands.
+- Do not add abstractions, files, or dependencies that aren't immediately needed.
+- Do not refactor working code unless directly asked.

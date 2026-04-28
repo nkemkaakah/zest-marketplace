@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactElement } from "react";
+import { useEffect, useState, type FormEvent, type ReactElement } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   CircleX,
@@ -10,6 +10,7 @@ import {
   Star,
   UserRound,
 } from "lucide-react";
+import { useAuthStore } from "@/store";
 import { useCartStore } from "@/store/cartStore";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }): string =>
@@ -20,11 +21,18 @@ const navLinkClass = ({ isActive }: { isActive: boolean }): string =>
 
 export function SiteHeader(): ReactElement {
   const navigate = useNavigate();
-  const isSignedIn = true;
+  const user = useAuthStore((state) => state.user);
+  const initialize = useAuthStore((state) => state.initialize);
+  const logout = useAuthStore((state) => state.logout);
+  const isSignedIn = Boolean(user);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState<boolean>(false);
   const cartCount = useCartStore((s) =>
     s.lines.reduce((acc, line) => acc + line.quantity, 0),
   );
+
+  useEffect(() => {
+    void initialize();
+  }, [initialize]);
 
   function onSearchSubmit(e: FormEvent<HTMLFormElement>): void {
     e.preventDefault();
@@ -35,6 +43,12 @@ export function SiteHeader(): ReactElement {
       params.set("q", q);
     }
     navigate(`/products?${params.toString()}`);
+  }
+
+  async function onLogoutClick(): Promise<void> {
+    await logout();
+    setIsAccountMenuOpen(false);
+    navigate("/login");
   }
 
   return (
@@ -57,9 +71,11 @@ export function SiteHeader(): ReactElement {
             <NavLink className={navLinkClass} to="/about">
               About
             </NavLink>
-            <NavLink className={navLinkClass} to="/signup">
-              Sign Up
-            </NavLink>
+            {isSignedIn ? null : (
+              <NavLink className={navLinkClass} to="/signup">
+                Sign Up
+              </NavLink>
+            )}
           </nav>
         </div>
         <div className="relative flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:gap-actions-gap">
@@ -146,7 +162,7 @@ export function SiteHeader(): ReactElement {
                   className="flex items-center gap-4 text-left"
                   role="menuitem"
                   onClick={() => {
-                    setIsAccountMenuOpen(false);
+                    void onLogoutClick();
                   }}
                 >
                   <LogOut className="size-6" strokeWidth={1.5} />
