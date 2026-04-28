@@ -11,4 +11,4 @@ alwaysApply: true
 - Reuse components from `src/components/` before creating new ones.
 - Follow DRY — extract repeated logic into hooks or utils.
 - Write unit tests for every new component or utility.
-- No need ot run lint or build commands
+- No need ot run lint or build or migration/databse commands

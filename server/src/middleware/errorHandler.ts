@@ -1,0 +1,23 @@
+import type { NextFunction, Request, Response } from "express";
+import { errorResponse } from "../utils/response.js";
+
+export function notFoundHandler(req: Request, res: Response): void {
+  res
+    .status(404)
+    .json(errorResponse(`Route not found: ${req.method} ${req.originalUrl}`));
+}
+
+export function errorHandler(
+  err: unknown,
+  _req: Request,
+  res: Response,
+  _next: NextFunction,
+): void {
+  const message = err instanceof Error ? err.message : "Internal server error";
+
+  if (process.env.NODE_ENV !== "production") {
+    console.error(err);
+  }
+
+  res.status(500).json(errorResponse(message));
+}
