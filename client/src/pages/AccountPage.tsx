@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/Button";
 
 export default function AccountPage(): ReactElement {
   const user = useAuthStore((state) => state.user);
+  const loading = useAuthStore((state) => state.loading);
+  const updateProfile = useAuthStore((state) => state.updateProfile);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [mail, setMail] = useState("");
@@ -12,6 +14,7 @@ export default function AccountPage(): ReactElement {
   const [currentPwd, setCurrentPwd] = useState("");
   const [newPwd, setNewPwd] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
+  const [profileMessage, setProfileMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -31,6 +34,13 @@ export default function AccountPage(): ReactElement {
     }
     return user?.email ?? "User";
   }, [user]);
+
+  async function onSaveChanges(): Promise<void> {
+    setProfileMessage(null);
+    const fullName = [firstName.trim(), lastName.trim()].filter((part) => part.length > 0).join(" ");
+    const saved = await updateProfile(fullName);
+    setProfileMessage(saved ? "Profile updated successfully." : "Unable to save profile changes.");
+  }
 
   return (
     <div className="mx-auto w-full px-4 py-20 lg:px-site">
@@ -157,10 +167,21 @@ export default function AccountPage(): ReactElement {
             <Button variant="ghost" type="button" className="px-0">
               Cancel
             </Button>
-            <Button type="button" variant="sale" className="px-12 py-4">
+            <Button
+              type="button"
+              variant="sale"
+              className="px-12 py-4 cursor-pointer"
+              disabled={loading}
+              onClick={() => {
+                void onSaveChanges();
+              }}
+            >
               Save Changes
             </Button>
           </div>
+          {profileMessage ? (
+            <p className="mt-4 text-right font-sans text-title-14 text-fg">{profileMessage}</p>
+          ) : null}
         </div>
       </div>
     </div>

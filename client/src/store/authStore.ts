@@ -10,6 +10,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<boolean>;
   register: (fullName: string, email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
+  updateProfile: (fullName: string) => Promise<boolean>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -61,6 +62,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       await authService.logout();
     } finally {
       set({ user: null, loading: false, initialized: true });
+    }
+  },
+  updateProfile: async (fullName) => {
+    set({ loading: true, error: null });
+    try {
+      const { user } = await authService.updateMe({ fullName });
+      set({ user, loading: false, error: null });
+      return true;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Profile update failed";
+      set({ loading: false, error: message });
+      return false;
     }
   },
 }));

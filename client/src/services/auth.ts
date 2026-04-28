@@ -23,6 +23,10 @@ interface LoginInput {
   password: string;
 }
 
+interface UpdateMeInput {
+  fullName: string;
+}
+
 export function register(input: RegisterInput): Promise<AuthPayload> {
   return apiJson<AuthPayload>("/api/auth/register", {
     method: "POST",
@@ -45,4 +49,11 @@ export function logout(): Promise<null> {
 
 export function me(): Promise<AuthPayload> {
   return apiJson<AuthPayload>("/api/auth/me");
+}
+
+export function updateMe(input: UpdateMeInput): Promise<AuthPayload> {
+  return apiJson<AuthPayload>("/api/auth/me", {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
 }

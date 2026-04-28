@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import {
   loginUser,
   registerUser,
+  updateUserProfile,
 } from "../services/authService.js";
 import type { AuthenticatedRequest } from "../types/auth.js";
 import { errorResponse, successResponse } from "../utils/response.js";
@@ -73,4 +74,32 @@ export function getMe(req: AuthenticatedRequest, res: Response): void {
   }
 
   res.json(successResponse({ user: req.user }, "Current user"));
+}
+
+export async function updateMe(req: AuthenticatedRequest, res: Response): Promise<void> {
+  if (!req.user) {
+    res.status(401).json(errorResponse("Unauthorized"));
+    return;
+  }
+
+  const { fullName } = req.body as { fullName?: unknown };
+  if (fullName !== undefined && typeof fullName !== "string") {
+    res.status(400).json(errorResponse("fullName must be a string"));
+    return;
+  }
+
+  const nextFullName =
+    typeof fullName === "string" ? (fullName.trim().length > 0 ? fullName.trim() : null) : null;
+
+  const updated = await updateUserProfile({
+    userId: req.user.id,
+    fullName: nextFullName,
+  });
+
+  if (!updated) {
+    res.status(400).json(errorResponse("Unable to update user profile"));
+    return;
+  }
+
+  res.json(successResponse({ user: updated }, "Profile updated"));
 }

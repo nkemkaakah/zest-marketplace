@@ -12,6 +12,11 @@ export interface LoginInput {
   password: string;
 }
 
+export interface UpdateUserProfileInput {
+  userId: string;
+  fullName: string | null;
+}
+
 interface UsersRow {
   id: string;
   email: string;
@@ -132,6 +137,25 @@ export async function getUserFromAccessToken(
     phone: null,
     avatarUrl: null,
   };
+}
+
+export async function updateUserProfile(
+  input: UpdateUserProfileInput,
+): Promise<AuthenticatedUser | null> {
+  const { data, error } = await supabase
+    .from("users")
+    .update({
+      full_name: input.fullName,
+    })
+    .eq("id", input.userId)
+    .select("id, email, full_name, phone, avatar_url")
+    .maybeSingle<UsersRow>();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return mapUserRow(data);
 }
 
 async function getPublicUserById(id: string): Promise<AuthenticatedUser | null> {
