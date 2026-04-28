@@ -1,0 +1,13 @@
+---
+description: TypeScript, API, env, components, DRY, and testing standards
+alwaysApply: true
+---
+
+# Code standards
+
+- No `any` in TypeScript.
+- All API calls go through `src/services/` only.
+- All secrets via `.env` — never hardcoded.
+- Reuse components from `src/components/` before creating new ones.
+- Follow DRY — extract repeated logic into hooks or utils.
+- Write unit tests for every new component or utility.

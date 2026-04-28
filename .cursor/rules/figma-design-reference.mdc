@@ -1,0 +1,21 @@
+---
+description: Figma file as UI source of truth; consult Figma before building pages or components
+alwaysApply: true
+---
+
+# Figma design reference
+
+## Source of truth
+
+- The source of truth for **all** UI is this Figma file: https://www.figma.com/design/cGxcEgBdExnwK7WEsIHRH5/Full-E-Commerce-Website-UI-UX-Design--Community-?node-id=1-3&p=f
+- Before building or modifying **any** page or component, call `get_document_info` on the above Figma URL to list all available frames.
+- Infer the most relevant frame based on what is being built (for example, “product listing” → find a frame with a similar name or intent).
+- If multiple frames could match, list them and pick the most specific one.
+- Extract exact spacing, colors, typography, and layout from the matched frame before writing any code.
+- Never assume or invent design values — always pull from Figma.
+
+## Stack
+
+- React + TypeScript + Tailwind CSS
+- Reuse components from `src/components/`
+- Match Tailwind tokens to Figma design tokens (colors, spacing, font sizes)

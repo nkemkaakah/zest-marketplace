@@ -1,0 +1,10 @@
+---
+description: SPEC.md as product and technical source of truth for the project
+alwaysApply: true
+---
+
+# Project specification
+
+- Always read `@SPEC.md` (see `SPEC.md` at the project root) before starting any task.
+- Treat it as the source of truth for features, stack decisions, and evaluation criteria.
+- Never add libraries or patterns that contradict it.
