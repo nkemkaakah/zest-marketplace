@@ -7,8 +7,11 @@ import {
   ChevronRight,
   Gamepad2,
   Headphones,
+  Headset,
   Monitor,
+  ShieldCheck,
   Smartphone,
+  Truck,
   Watch,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -501,6 +504,39 @@ export default function HomePage(): ReactElement {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      <section className="mx-auto w-full  px-4 py-section-y-md lg:px-site">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-[88px]">
+          {[
+            {
+              title: "FREE AND FAST DELIVERY",
+              description: "Free delivery for all orders over $140",
+              icon: Truck,
+            },
+            {
+              title: "24/7 CUSTOMER SERVICE",
+              description: "Friendly 24/7 customer support",
+              icon: Headset,
+            },
+            {
+              title: "MONEY BACK GUARANTEE",
+              description: "We reurn money within 30 days",
+              icon: ShieldCheck,
+            },
+          ].map(({ title, description, icon: Icon }) => (
+            <div key={title} className="flex flex-col items-center gap-6 text-center">
+              <div className="relative inline-flex size-20 items-center justify-center rounded-full bg-[#c1c0c1]">
+                <span className="inline-flex size-[58px] items-center justify-center rounded-full bg-fg text-fg-inverse">
+                  <Icon className="size-8" strokeWidth={1.8} />
+                </span>
+              </div>
+              <div className="space-y-2">
+                <p className="font-sans text-[20px] font-semibold leading-7 text-fg">{title}</p>
+                <p className="font-sans text-[14px] leading-[21px] text-fg">{description}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </div>

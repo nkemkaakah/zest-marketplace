@@ -11,8 +11,8 @@ export default function LoginPage(): ReactElement {
 
   return (
     <section className="w-full pb-24 pt-10 lg:pb-36 lg:pt-14">
-      <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-[805px_minmax(370px,1fr)] lg:gap-[129px]">
-        <div className="hidden h-[781px] overflow-hidden rounded-r-control bg-[#CBE4E8] lg:block">
+      <div className="flex w-full flex-col gap-10 lg:flex-row lg:items-stretch">
+        <div className="hidden h-[781px] overflow-hidden rounded-r-control bg-[#CBE4E8] lg:block lg:basis-[55%]">
           <img
             src="https://www.figma.com/api/mcp/asset/4b48b727-f830-489d-a417-5a9057cdc7f7"
             alt=""
@@ -20,10 +20,11 @@ export default function LoginPage(): ReactElement {
             loading="lazy"
           />
         </div>
-        <div className="px-4 lg:px-0">
+        <div className="flex w-full flex-1 items-center justify-center px-4 lg:px-8">
+          <div className="w-full max-w-[370px]">
           <h1 className="font-display text-heading-32 tracking-[1.44px] text-fg">Log in to Exclusive</h1>
           <p className="mt-6 font-sans text-title-16 text-fg">Enter your details below</p>
-          <form className="mt-12 flex max-w-[370px] flex-col gap-10" onSubmit={onSubmit}>
+          <form className="mt-12 flex flex-col gap-10" onSubmit={onSubmit}>
             <label className="flex flex-col gap-2">
               <span className="font-sans text-title-16 text-fg opacity-40">Email or Phone Number</span>
               <input
@@ -59,6 +60,7 @@ export default function LoginPage(): ReactElement {
               </button>
             </div>
           </form>
+          </div>
         </div>
       </div>
     </section>

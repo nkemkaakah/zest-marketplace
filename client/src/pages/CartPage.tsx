@@ -8,10 +8,12 @@ import { CouponApplyRow } from "@/components/ui/CouponApplyRow";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice } from "@/utils/formatPrice";
 
+/** Column header row — visually hidden on mobile, grid on tablet+ */
 function CartTableHeader(): ReactElement {
   return (
     <div
-      className="hidden min-h-[72px] shadow-card tablet:grid tablet:grid-cols-[24px_54px_minmax(0,1fr)_120px_100px_100px] tablet:items-center tablet:gap-4 tablet:rounded-control tablet:bg-surface tablet:px-10 tablet:py-4 tablet:font-sans tablet:text-title-16 tablet:text-fg"
+      className="hidden min-h-[72px] shadow-card tablet:grid tablet:items-center tablet:rounded-control tablet:bg-surface tablet:px-6 tablet:py-4 tablet:font-sans tablet:text-title-16 tablet:text-fg lg:px-10"
+      style={{ gridTemplateColumns: "24px 54px 1fr 100px 110px 100px", gap: "16px" }}
       aria-hidden
     >
       <span />
@@ -35,7 +37,8 @@ export default function CartPage(): ReactElement {
   );
 
   return (
-    <div className="mx-auto w-full  px-4 py-10 lg:px-site">
+    /* Full-width container — gutters via responsive padding only (no max-w here) */
+    <div className="w-full px-4 py-10 md:px-8 lg:px-site">
       <Breadcrumb
         variant="muted-trail"
         items={[
@@ -53,118 +56,168 @@ export default function CartPage(): ReactElement {
           </Link>
         </div>
       ) : (
-        <div className="mt-10 flex flex-col gap-cart-section-y">
-          <div className="flex flex-col gap-cart-inner-gap">
-            <div className="flex flex-col gap-cart-row-gap">
+        <div className="mt-10 flex flex-col gap-16 lg:gap-20">
+          {/* ── table + action buttons ── */}
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
               <CartTableHeader />
+
               <ul className="flex flex-col gap-4">
                 {lines.map((line) => (
                   <li
                     key={line.productId}
-                    className="rounded-control bg-surface px-4 py-4 shadow-card tablet:grid tablet:min-h-[102px] tablet:grid-cols-[24px_54px_minmax(0,1fr)_120px_100px_100px] tablet:items-center tablet:gap-4 tablet:px-10 tablet:py-6"
+                    className="rounded-control bg-surface px-4 py-4 shadow-card tablet:min-h-[102px] tablet:items-center tablet:px-6 tablet:py-6 lg:px-10"
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "auto 1fr",
+                      gap: "12px",
+                    }}
                   >
-                    <div className="mb-3 flex items-start justify-between gap-3 tablet:mb-0 tablet:block">
+                    {/* --- mobile: stacked card layout --- */}
+                    <div className="flex items-start gap-3 tablet:hidden">
+                      {/* remove button */}
                       <button
                         type="button"
-                        className="text-sale hover:opacity-80 tablet:mx-auto tablet:block"
+                        className="mt-0.5 shrink-0 text-sale hover:opacity-80"
                         aria-label={`Remove ${line.product.name}`}
-                        onClick={() => {
-                          remove(line.productId);
-                        }}
+                        onClick={() => { remove(line.productId); }}
                       >
                         <X className="size-5" strokeWidth={1.5} />
                       </button>
-                      <Link
-                        to={`/products/${line.productId}`}
-                        className="block shrink-0 tablet:hidden"
-                      >
+                      <Link to={`/products/${line.productId}`} className="block shrink-0">
                         <img
                           src={line.product.imageUrl}
-                          alt=""
+                          alt={line.product.name}
                           className="size-14 rounded object-cover"
                           loading="lazy"
                         />
                       </Link>
+                      <div className="min-w-0">
+                        <Link
+                          className="font-sans text-title-16 text-fg hover:underline"
+                          to={`/products/${line.productId}`}
+                        >
+                          {line.product.name}
+                        </Link>
+                        <p className="mt-0.5 font-sans text-title-14 text-fg/70">
+                          {formatPrice(line.product.price)} each
+                        </p>
+                        <div className="mt-3 flex items-center gap-4">
+                          <CartQuantityControl
+                            value={line.quantity}
+                            min={1}
+                            max={line.product.stock}
+                            label={`Quantity for ${line.product.name}`}
+                            onChange={(n) => { setQuantity(line.productId, n); }}
+                          />
+                          <span className="font-sans text-title-16 font-medium text-fg">
+                            {formatPrice(line.product.price * line.quantity)}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <Link to={`/products/${line.productId}`} className="hidden tablet:block">
-                      <img
-                        src={line.product.imageUrl}
-                        alt=""
-                        className="size-[54px] rounded object-cover"
-                        loading="lazy"
-                      />
-                    </Link>
-                    <div className="min-w-0 tablet:pr-2">
-                      <Link
-                        className="font-sans text-title-16 text-fg hover:underline"
-                        to={`/products/${line.productId}`}
+
+                    {/* --- tablet+: 6-col grid row --- */}
+                    <div
+                      className="hidden tablet:grid tablet:w-full tablet:items-center"
+                      style={{
+                        gridTemplateColumns: "24px 54px 1fr 100px 110px 100px",
+                        gap: "16px",
+                        gridColumn: "1 / -1",
+                      }}
+                    >
+                      <button
+                        type="button"
+                        className="text-sale hover:opacity-80"
+                        aria-label={`Remove ${line.product.name}`}
+                        onClick={() => { remove(line.productId); }}
                       >
-                        {line.product.name}
+                        <X className="size-5" strokeWidth={1.5} />
+                      </button>
+                      <Link to={`/products/${line.productId}`}>
+                        <img
+                          src={line.product.imageUrl}
+                          alt={line.product.name}
+                          className="size-[54px] rounded object-cover"
+                          loading="lazy"
+                        />
                       </Link>
-                      <p className="mt-1 font-sans text-title-14 text-fg tablet:hidden">
-                        {formatPrice(line.product.price)} each
+                      <div className="min-w-0 pr-2">
+                        <Link
+                          className="font-sans text-title-16 text-fg hover:underline"
+                          to={`/products/${line.productId}`}
+                        >
+                          {line.product.name}
+                        </Link>
+                      </div>
+                      <p className="font-sans text-title-16 text-fg">
+                        {formatPrice(line.product.price)}
                       </p>
-                    </div>
-                    <p className="hidden font-sans text-title-16 text-fg tablet:block">
-                      {formatPrice(line.product.price)}
-                    </p>
-                    <div className="mt-4 flex items-center justify-between gap-4 tablet:mt-0 tablet:justify-start">
-                      <span className="font-sans text-title-14 text-fg tablet:hidden">Qty</span>
                       <CartQuantityControl
                         value={line.quantity}
                         min={1}
                         max={line.product.stock}
                         label={`Quantity for ${line.product.name}`}
-                        onChange={(n) => {
-                          setQuantity(line.productId, n);
-                        }}
+                        onChange={(n) => { setQuantity(line.productId, n); }}
                       />
+                      <p className="font-sans text-title-16 text-fg">
+                        {formatPrice(line.product.price * line.quantity)}
+                      </p>
                     </div>
-                    <p className="mt-3 font-sans text-title-16 text-fg tablet:mt-0">
-                      {formatPrice(line.product.price * line.quantity)}
-                    </p>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:justify-between">
+
+            {/* Return To Shop / Update Cart */}
+            <div className="flex flex-col gap-3 tablet:flex-row tablet:items-center tablet:justify-between">
               <Link
                 to="/products"
-                className="inline-flex w-full items-center justify-center rounded-control border border-hairline border-border-outline bg-transparent px-12 py-4 font-sans text-title-16 text-fg transition hover:bg-surface-muted tablet:w-auto"
+                className="inline-flex w-full items-center justify-center rounded-control border border-hairline border-fg/50 bg-transparent px-8 py-3.5 font-sans text-title-16 text-fg transition hover:bg-surface-muted tablet:w-auto"
               >
                 Return To Shop
               </Link>
-              <Button type="button" variant="outline-muted" className="w-full px-12 py-4 tablet:w-auto">
+              <Button
+                type="button"
+                variant="outline-muted"
+                className="w-full px-8 py-3.5 tablet:w-auto"
+              >
                 Update Cart
               </Button>
             </div>
           </div>
 
-          <div className="flex flex-col gap-10 tablet:flex-row tablet:flex-wrap tablet:items-start tablet:gap-coupon-total-gap">
-            <CouponApplyRow className="w-full max-w-coupon shrink-0" />
-            <aside className="w-full max-w-cart-total shrink-0 rounded-control border border-hairline border-fg bg-surface p-6">
+          {/* ── coupon + cart total ── */}
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+            {/* Coupon – grows to fill left side */}
+            <div className="w-full lg:max-w-[440px]">
+              <CouponApplyRow />
+            </div>
+
+            {/* Cart Total – fixed-width card on the right */}
+            <aside className="w-full shrink-0 rounded-control border border-hairline border-fg bg-surface p-6 lg:w-[470px]">
               <h2 className="font-sans text-title-20-md text-fg">Cart Total</h2>
               <div className="mt-6 space-y-4 font-sans text-title-16 text-fg">
                 <div className="flex items-center justify-between gap-4">
                   <span>Subtotal:</span>
                   <span>{formatPrice(subtotal)}</span>
                 </div>
-                <div className="h-px w-full bg-fg opacity-40" />
+                <div className="h-px w-full bg-fg/40" />
                 <div className="flex items-center justify-between gap-4">
                   <span>Shipping:</span>
                   <span>Free</span>
                 </div>
-                <div className="h-px w-full bg-fg opacity-40" />
-                <div className="flex items-center justify-between gap-4 font-sans text-title-16 text-fg">
+                <div className="h-px w-full bg-fg/40" />
+                <div className="flex items-center justify-between gap-4">
                   <span>Total:</span>
                   <span>{formatPrice(subtotal)}</span>
                 </div>
               </div>
               <Link
                 to="/checkout"
-                className="mt-6 flex w-full items-center justify-center rounded-control bg-sale px-12 py-4 font-sans text-title-16 font-medium text-fg-inverse transition hover:opacity-90"
+                className="mt-6 flex w-full items-center justify-center rounded-control bg-sale px-8 py-4 font-sans text-title-16 font-medium text-fg-inverse transition hover:opacity-90"
               >
-                Proceed to checkout
+                Procees to checkout
               </Link>
             </aside>
           </div>

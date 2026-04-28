@@ -1,6 +1,15 @@
-import type { FormEvent, ReactElement } from "react";
+import { useState, type FormEvent, type ReactElement } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Heart, Search, ShoppingCart } from "lucide-react";
+import {
+  CircleX,
+  Heart,
+  LogOut,
+  Search,
+  ShoppingBag,
+  ShoppingCart,
+  Star,
+  UserRound,
+} from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }): string =>
@@ -11,6 +20,8 @@ const navLinkClass = ({ isActive }: { isActive: boolean }): string =>
 
 export function SiteHeader(): ReactElement {
   const navigate = useNavigate();
+  const isSignedIn = true;
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState<boolean>(false);
   const cartCount = useCartStore((s) =>
     s.lines.reduce((acc, line) => acc + line.quantity, 0),
   );
@@ -28,7 +39,7 @@ export function SiteHeader(): ReactElement {
 
   return (
     <header className="w-full bg-surface" data-name="Header">
-      <div className="mx-auto flex w-full flex-col gap-6 px-4 pt-12 pb-6 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-0 tablet:px-  lg:px-site ">
+      <div className="mx-auto flex w-full flex-col gap-6 px-4 pb-6 pt-10 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-0 tablet:px-4 lg:px-site">
         <div className="flex gap-6 md:flex-row tablet:items-start tablet:gap-10 xl:gap-28">
           <Link
             className="font-display text-logo-24 font-bold tracking-logo text-fg"
@@ -51,7 +62,7 @@ export function SiteHeader(): ReactElement {
             </NavLink>
           </nav>
         </div>
-        <div className="flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:gap-actions-gap">
+        <div className="relative flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:gap-actions-gap">
           <form
             className="flex min-h-search-min w-full items-center rounded-control bg-surface-muted pl-5 pr-3 py-2 tablet:w-64 desktop:w-80"
             onSubmit={onSearchSubmit}
@@ -92,7 +103,58 @@ export function SiteHeader(): ReactElement {
                 </span>
               ) : null}
             </Link>
+            {isSignedIn ? (
+              <button
+                type="button"
+                className="inline-flex size-8 items-center justify-center rounded-full bg-sale text-fg-inverse"
+                aria-expanded={isAccountMenuOpen}
+                aria-haspopup="menu"
+                aria-label="Account menu"
+                onClick={() => {
+                  setIsAccountMenuOpen((prev) => !prev);
+                }}
+              >
+                <UserRound className="size-4" strokeWidth={2} />
+              </button>
+            ) : null}
           </div>
+          {isSignedIn && isAccountMenuOpen ? (
+            <div
+              className="absolute right-0 top-12 z-20 w-[225px] rounded-control bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.65)_100%)] px-5 py-[18px] text-top-text shadow-card backdrop-blur-[75px]"
+              role="menu"
+              aria-label="Account actions"
+            >
+              <div className="flex flex-col gap-[13px] font-sans text-title-14">
+                <Link className="flex items-center gap-4" role="menuitem" to="/account">
+                  <UserRound className="size-8" strokeWidth={1.5} />
+                  <span>Manage My Account</span>
+                </Link>
+                <Link className="flex items-center gap-4" role="menuitem" to="/account#orders">
+                  <ShoppingBag className="size-6" strokeWidth={1.5} />
+                  <span>My Order</span>
+                </Link>
+                <Link className="flex items-center gap-4" role="menuitem" to="/account#cancellations">
+                  <CircleX className="size-6" strokeWidth={1.5} />
+                  <span>My Cancellations</span>
+                </Link>
+                <Link className="flex items-center gap-4" role="menuitem" to="/account#reviews">
+                  <Star className="size-6" strokeWidth={1.5} />
+                  <span>My Reviews</span>
+                </Link>
+                <button
+                  type="button"
+                  className="flex items-center gap-4 text-left"
+                  role="menuitem"
+                  onClick={() => {
+                    setIsAccountMenuOpen(false);
+                  }}
+                >
+                  <LogOut className="size-6" strokeWidth={1.5} />
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
       <div className="h-px w-full bg-fg opacity-30" aria-hidden />

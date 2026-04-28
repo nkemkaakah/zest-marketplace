@@ -76,7 +76,7 @@ export default function CheckoutPage(): ReactElement {
 
   if (lines.length === 0 && !submitted) {
     return (
-      <div className="mx-auto w-full   px-4 py-16 lg:px-site">
+      <div className="mx-auto w-full max-w-site px-4 py-16 md:px-8 lg:px-0">
         <p className="font-sans text-title-16 text-fg opacity-80">Your cart is empty.</p>
         <Link className="mt-4 inline-block font-sans text-title-16 underline" to="/products">
           Browse products
@@ -87,7 +87,7 @@ export default function CheckoutPage(): ReactElement {
 
   if (submitted) {
     return (
-      <div className="mx-auto w-full   px-4 py-16 lg:px-site">
+      <div className="mx-auto w-full  px-4 py-16 md:px-8 lg:px-0">
         <h1 className="font-display text-heading-36 text-fg">Thank you</h1>
         <p className="mt-4 max-w-xl font-sans text-title-16 text-fg opacity-80">
           Your order has been recorded. Payment integration with the Zest SDK can be wired here
@@ -101,7 +101,7 @@ export default function CheckoutPage(): ReactElement {
   }
 
   return (
-    <div className="mx-auto w-full   px-4 py-10 lg:px-site">
+    <div className="mx-auto w-full  px-4 py-10 md:px-8 lg:px-site">
       <Breadcrumb
         variant="muted-trail"
         items={[
@@ -114,10 +114,10 @@ export default function CheckoutPage(): ReactElement {
       />
       <h1 className="mt-8 font-display text-heading-billing text-fg">Billing Details</h1>
 
-      <div className="mt-10 flex flex-col gap-12 desktop:grid desktop:grid-cols-[minmax(0,max-content)_1fr] desktop:items-start desktop:gap-16">
+      <div className="mt-10 flex flex-col gap-12 xl:grid xl:grid-cols-[470px_527px] xl:items-start xl:justify-between xl:gap-10">
         <form
           id={formId}
-          className="flex w-full max-w-billing flex-col gap-8"
+          className="flex w-full max-w-billing flex-col gap-8 xl:max-w-none"
           onSubmit={onSubmit}
           noValidate
         >
@@ -215,7 +215,7 @@ export default function CheckoutPage(): ReactElement {
           </label>
         </form>
 
-        <div className="flex w-full flex-col gap-8 desktop:max-w-[422px] desktop:justify-self-end">
+        <div className="flex w-full flex-col gap-8 xl:w-[527px] xl:justify-self-end">
           <div className="flex flex-col gap-8">
             {lines.map((line) => (
               <div key={line.productId} className="flex items-center gap-6">
@@ -233,7 +233,7 @@ export default function CheckoutPage(): ReactElement {
             ))}
           </div>
 
-          <div className="flex flex-col gap-4 font-sans text-title-16 text-fg">
+          <div className="flex w-full max-w-[422px] flex-col gap-4 font-sans text-title-16 text-fg">
             <div className="flex items-start justify-between gap-6">
               <span>Subtotal:</span>
               <span>{formatPrice(subtotal)}</span>
@@ -251,7 +251,7 @@ export default function CheckoutPage(): ReactElement {
           </div>
 
           <div className="flex flex-col gap-4 font-sans text-title-16 text-fg">
-            <div className="flex flex-wrap items-center gap-10">
+            <div className="flex flex-wrap items-center justify-between gap-4 xl:max-w-[422px]">
               <label className="flex cursor-pointer items-center gap-4">
                 <input
                   type="radio"
@@ -264,7 +264,32 @@ export default function CheckoutPage(): ReactElement {
                 />
                 <span>Bank</span>
               </label>
-              <span className="text-title-12 opacity-60">Visa · Mastercard · …</span>
+              <div className="flex items-center gap-2 opacity-90">
+                <img
+                  src="https://www.figma.com/api/mcp/asset/55bea2b5-bc9d-434f-a969-426e739b609b"
+                  alt="Bkash"
+                  className="h-7 w-[42px] object-contain"
+                  loading="lazy"
+                />
+                <img
+                  src="https://www.figma.com/api/mcp/asset/f0792f04-fe6a-436b-a233-49a8263ddf58"
+                  alt="Visa"
+                  className="h-7 w-[42px] object-contain"
+                  loading="lazy"
+                />
+                <img
+                  src="https://www.figma.com/api/mcp/asset/828023e4-ef22-4e6b-ab63-781254b48d5d"
+                  alt="Mastercard"
+                  className="h-7 w-[42px] object-contain"
+                  loading="lazy"
+                />
+                <img
+                  src="https://www.figma.com/api/mcp/asset/cb1b3284-7e9b-4488-9ee0-6364d9adcdad"
+                  alt="Nagad"
+                  className="h-7 w-[42px] object-contain"
+                  loading="lazy"
+                />
+              </div>
             </div>
             <label className="flex cursor-pointer items-center gap-4">
               <input
@@ -280,9 +305,14 @@ export default function CheckoutPage(): ReactElement {
             </label>
           </div>
 
-          <CouponApplyRow />
+          <CouponApplyRow className="xl:max-w-[527px]" />
 
-          <Button type="submit" form={formId} variant="sale" className="w-full px-12 py-4 sm:w-auto">
+          <Button
+            type="submit"
+            form={formId}
+            variant="sale"
+            className="w-full px-12 py-4 sm:w-auto xl:min-w-[190px]"
+          >
             Place Order
           </Button>
         </div>
