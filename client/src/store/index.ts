@@ -1,5 +1,2 @@
-/**
- * Global client state (cart, checkout, etc.) will be exported from this module.
- */
-
-export {};
+export { useCartStore } from "./cartStore";
+export { useWishlistStore } from "./wishlistStore";
