@@ -1,6 +1,16 @@
 import { useEffect, useState, type ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Camera,
+  ChevronRight,
+  Gamepad2,
+  Headphones,
+  Monitor,
+  Smartphone,
+  Watch,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SectionTitle } from "@/components/ui/SectionTitle";
@@ -20,6 +30,20 @@ const categories = [
   "Groceries & Pets",
   "Health & Beauty",
 ] as const;
+
+const categoryTiles = [
+  { label: "Phones", icon: Smartphone, to: "/products?category=Electronics" },
+  { label: "Computers", icon: Monitor, to: "/products?category=Electronics" },
+  { label: "SmartWatch", icon: Watch, to: "/products?category=Electronics" },
+  { label: "Camera", icon: Camera, to: "/products?category=Electronics", active: true },
+  { label: "HeadPhones", icon: Headphones, to: "/products?category=Electronics" },
+  { label: "Gaming", icon: Gamepad2, to: "/products?category=Electronics" },
+] as const satisfies readonly {
+  label: string;
+  icon: typeof Smartphone;
+  to: string;
+  active?: boolean;
+}[];
 
 interface AsyncState<T> {
   data: T | null;
@@ -212,17 +236,47 @@ export default function HomePage(): ReactElement {
         <ProductRow state={flash} emptyLabel="No flash sale items right now." />
       </section>
 
-      <section className="mx-auto w-full  space-y-10 px-4 py-section-y-md lg:px-site">
-        <SectionTitle eyebrow="Categories" title="Browse By Category" />
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          {categories.slice(0, 6).map((label) => (
+      <section className="mx-auto w-full space-y-[60px] px-4 py-section-y-md lg:px-site">
+        <div className="flex items-end justify-between gap-6">
+          <div className="space-y-5">
+            <div className="flex items-center gap-4">
+              <span className="inline-block h-10 w-5 rounded-control bg-sale" aria-hidden />
+              <p className="font-sans text-[16px] font-semibold leading-5 text-sale">Categories</p>
+            </div>
+            <h2 className="font-display text-[36px] font-semibold leading-[48px] tracking-[0.04em] text-fg">
+              Browse By Category
+            </h2>
+          </div>
+          <div className="hidden items-center gap-2 tablet:flex">
+            <button
+              type="button"
+              aria-label="Previous categories"
+              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg"
+            >
+              <ArrowLeft className="size-6" strokeWidth={1.75} />
+            </button>
+            <button
+              type="button"
+              aria-label="Next categories"
+              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg"
+            >
+              <ArrowRight className="size-6" strokeWidth={1.75} />
+            </button>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-[30px]">
+          {categoryTiles.map(({ label, icon: Icon, to }) => (
             <Link
               key={label}
-              to={`/products?category=${encodeURIComponent(label)}`}
-              className="flex aspect-square flex-col items-center justify-center gap-3 rounded-md border border-border-subtle bg-surface-muted p-4 text-center font-sans text-title-14 text-fg transition hover:border-fg"
+              to={to}
+              className={`flex h-[145px] min-w-0 flex-col items-center justify-center gap-4 rounded-control border text-center transition ${
+                label === "Camera"
+                  ? "border-transparent bg-sale text-fg-inverse shadow-card"
+                  : "border-border-subtle bg-surface text-fg hover:border-fg/50"
+              }`}
             >
-              <span className="inline-block size-14 rounded-full bg-surface shadow-inner" aria-hidden />
-              <span>{label}</span>
+              <Icon className="size-14" strokeWidth={1.5} />
+              <span className="font-sans text-[16px] font-normal leading-6">{label}</span>
             </Link>
           ))}
         </div>
