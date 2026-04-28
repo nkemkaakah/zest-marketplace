@@ -98,9 +98,11 @@ function useProductsSection(options: FetchProductsParams): AsyncState<Product[]>
 function ProductRow({
   state,
   emptyLabel,
+  variant = "default",
 }: {
   state: AsyncState<Product[]>;
   emptyLabel: string;
+  variant?: "default" | "flash";
 }): ReactElement {
   if (state.loading) {
     return (
@@ -130,13 +132,26 @@ function ProductRow({
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {state.data.map((product) => (
-        <ProductCard key={product.id} product={product} variant="flash" />
+        <ProductCard key={product.id} product={product} variant={variant} />
       ))}
     </div>
   );
 }
 
 export default function HomePage(): ReactElement {
+  const initialCountdownSeconds = ((5 * 24 + 23) * 60 + 59) * 60 + 35;
+  const [countdownSeconds, setCountdownSeconds] = useState(initialCountdownSeconds);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setCountdownSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, []);
+
   const flash = useProductsSection({
     flashOnly: true,
     pageSize: 8,
@@ -153,6 +168,10 @@ export default function HomePage(): ReactElement {
     pageSize: 8,
     sort: "newest",
   });
+  const days = Math.floor(countdownSeconds / (24 * 60 * 60));
+  const hours = Math.floor((countdownSeconds % (24 * 60 * 60)) / (60 * 60));
+  const minutes = Math.floor((countdownSeconds % (60 * 60)) / 60);
+  const seconds = countdownSeconds % 60;
 
   return (
     <div className="bg-surface">
@@ -282,86 +301,200 @@ export default function HomePage(): ReactElement {
         </div>
       </section>
 
-      <section className="mx-auto w-full  space-y-10 px-4 py-section-y-md lg:px-site">
-        <SectionTitle
-          eyebrow="This Month"
-          title="Best Selling Products"
-          action={
-            <Link to="/products?sort=price-desc">
-              <Button variant="secondary" type="button" className="w-full sm:w-auto">
-                View All
-              </Button>
-            </Link>
-          }
-        />
-        <ProductRow state={best} emptyLabel="No products to show." />
+      <section className="mx-auto w-full space-y-[60px] px-4 py-section-y-md lg:px-site">
+        <div className="flex items-end justify-between gap-6">
+          <div className="space-y-5">
+            <div className="flex items-center gap-4">
+              <span className="inline-block h-10 w-5 rounded-control bg-sale" aria-hidden />
+              <p className="font-sans text-[16px] font-semibold leading-5 text-sale">This Month</p>
+            </div>
+            <h2 className="font-display text-[36px] font-semibold leading-[48px] tracking-[0.04em] text-fg">
+              Best Selling Products
+            </h2>
+          </div>
+          <Link
+            to="/products?sort=price-desc"
+            className="inline-flex h-14 items-center justify-center rounded-control bg-sale px-12 font-sans text-[16px] font-medium text-fg-inverse"
+          >
+            View All
+          </Link>
+        </div>
+        <ProductRow state={best} emptyLabel="No products to show." variant="default" />
       </section>
 
-      <section className="mx-auto w-full  space-y-10 px-4 py-section-y-md lg:px-site">
-        <SectionTitle eyebrow="Our Products" title="Explore Our Products" />
-        <ProductRow state={explore} emptyLabel="No products to show." />
+      <section className="mx-auto w-full px-4 py-section-y-md lg:px-site">
+        <div className="relative h-[500px] w-full overflow-hidden bg-top">
+          <div className="absolute left-[47.18%] top-0 h-full w-[43.08%]">
+            <img
+              src="https://www.figma.com/api/mcp/asset/dae8638d-3956-45dc-8a3f-94561a57ca44"
+              alt=""
+              className="h-full w-full scale-[1.4] object-cover opacity-70"
+              loading="lazy"
+            />
+          </div>
+          <div className="absolute left-[4.78%] top-[13.8%] space-y-8 text-fg-inverse">
+            <p className="font-sans text-[16px] font-semibold leading-5 text-[#00FF66]">Categories</p>
+            <h2 className="max-w-[443px] font-display text-[48px] font-semibold leading-[60px] tracking-[0.04em]">
+              Enhance Your Music Experience
+            </h2>
+            <div className="flex items-center gap-6">
+              {[
+                { value: String(hours).padStart(2, "0"), label: "Hours" },
+                { value: String(days).padStart(2, "0"), label: "Days" },
+                { value: String(minutes).padStart(2, "0"), label: "Minutes" },
+                { value: String(seconds).padStart(2, "0"), label: "Seconds" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="flex size-[62px] flex-col items-center justify-center rounded-full bg-surface text-fg"
+                >
+                  <span className="font-sans text-[16px] font-semibold leading-5">{item.value}</span>
+                  <span className="font-sans text-[11px] leading-[18px]">{item.label}</span>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="inline-flex h-14 items-center justify-center rounded-control bg-[#00FF66] px-12 font-sans text-[16px] font-medium leading-6 text-fg-inverse"
+            >
+              Buy Now!
+            </button>
+          </div>
+          <div className="absolute left-[44.96%] top-[7.4%] h-[420px] w-[51.28%] overflow-hidden">
+            <img
+              src="https://www.figma.com/api/mcp/asset/ec14b19d-7d9a-4012-bd72-045d54b4df5f"
+              alt=""
+              className="h-full w-full object-contain"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto w-full  space-y-[60px] px-4 py-section-y-md lg:px-site">
+        <div className="flex items-end justify-between gap-6">
+          <div className="space-y-5">
+            <div className="flex items-center gap-4">
+              <span className="inline-block h-10 w-5 rounded-control bg-sale" aria-hidden />
+              <p className="font-sans text-[16px] font-semibold leading-5 text-sale">Our Products</p>
+            </div>
+            <h2 className="font-display text-[36px] font-semibold leading-[48px] tracking-[0.04em] text-fg">
+              Explore Our Products
+            </h2>
+          </div>
+          <div className="hidden items-center gap-2 tablet:flex">
+            <button
+              type="button"
+              aria-label="Previous products"
+              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg"
+            >
+              <ArrowLeft className="size-6" strokeWidth={1.75} />
+            </button>
+            <button
+              type="button"
+              aria-label="Next products"
+              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg"
+            >
+              <ArrowRight className="size-6" strokeWidth={1.75} />
+            </button>
+          </div>
+        </div>
+        <ProductRow state={explore} emptyLabel="No products to show." variant="default" />
         <div className="flex justify-center">
-          <Link to="/products">
-            <Button variant="secondary" type="button">
-              View All Products
-            </Button>
+          <Link
+            to="/products"
+            className="inline-flex h-14 items-center justify-center rounded-control bg-sale px-12 font-sans text-[16px] font-medium text-fg-inverse"
+          >
+            View All Products
           </Link>
         </div>
       </section>
 
-      <section className="mx-auto w-full  px-4 py-section-y-lg lg:px-site">
-        <SectionTitle eyebrow="Featured" title="New Arrival" />
-        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="relative flex min-h-80 flex-col justify-end overflow-hidden rounded-md bg-surface-muted p-8 lg:min-h-96">
+      <section className="mx-auto w-full space-y-[60px] px-4 py-section-y-lg lg:px-site">
+        <div className="space-y-5">
+          <div className="flex items-center gap-4">
+            <span className="inline-block h-10 w-5 rounded-control bg-sale" aria-hidden />
+            <p className="font-sans text-[16px] font-semibold leading-5 text-sale">Featured</p>
+          </div>
+          <h2 className="font-display text-[36px] font-semibold leading-[48px] tracking-[0.04em] text-fg">
+            New Arrival
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 gap-[30px] lg:grid-cols-2">
+          <div className="relative flex min-h-[600px] flex-col justify-end overflow-hidden rounded-control bg-top p-8">
             <img
-              src="https://picsum.photos/seed/ps5-feature/800/600"
+              src="https://www.figma.com/api/mcp/asset/593d5abf-3ba8-44a2-902f-bc1d7e37d68a"
               alt=""
               className="absolute inset-0 h-full w-full object-cover"
               loading="lazy"
             />
             <div className="relative z-10 max-w-xs text-fg-inverse">
-              <p className="font-sans text-title-20-md">PlayStation 5</p>
-              <p className="mt-3 font-sans text-title-14 opacity-90">
+              <p className="font-display text-[24px] font-semibold tracking-[0.03em]">PlayStation 5</p>
+              <p className="mt-4 font-sans text-[14px] leading-[21px] opacity-90">
                 Black and White version of the PS5 coming out on sale.
               </p>
               <Link
                 to="/products/1"
-                className="mt-4 inline-flex font-sans text-title-16 text-fg-inverse underline underline-offset-8"
+                className="mt-4 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium"
               >
                 Shop Now
               </Link>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div className="relative flex min-h-64 flex-col justify-end overflow-hidden rounded-md bg-top p-6 text-fg-inverse">
+          <div className="grid grid-cols-1 gap-[32px] sm:grid-cols-2">
+            <div className="relative col-span-full flex min-h-[284px] flex-col justify-end overflow-hidden rounded-control bg-top p-6 text-fg-inverse">
               <img
-                src="https://picsum.photos/seed/womens-collection/600/400"
+                src="https://www.figma.com/api/mcp/asset/1bec77fe-72e7-4dda-9705-89acc41b6b68"
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover opacity-80"
                 loading="lazy"
               />
               <div className="relative z-10">
-                <p className="font-sans text-title-20-md">Women’s Collections</p>
-                <p className="mt-2 font-sans text-title-14 opacity-90">
+                <p className="font-display text-[24px] font-semibold tracking-[0.03em]">Women’s Collections</p>
+                <p className="mt-4 max-w-[255px] font-sans text-[14px] leading-[21px] opacity-90">
                   Featured woman collections that give you another vibe.
                 </p>
                 <Link
                   to={`/products?category=${encodeURIComponent("Women's Fashion")}`}
-                  className="mt-3 inline-flex font-sans text-title-16 underline underline-offset-8"
+                  className="mt-4 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium"
                 >
                   Shop Now
                 </Link>
               </div>
             </div>
-            <div className="relative flex min-h-64 flex-col justify-end overflow-hidden rounded-md bg-surface-muted p-6">
-              <div className="relative z-10 text-fg">
-                <p className="font-sans text-title-20-md">Speakers</p>
-                <p className="mt-2 font-sans text-title-14 opacity-80">
+            <div className="relative flex min-h-[284px] flex-col justify-end overflow-hidden rounded-control bg-top p-6 text-fg-inverse">
+              <img
+                src="https://www.figma.com/api/mcp/asset/cc2c49d4-63f3-4920-ad27-4b5ac314cd8e"
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover opacity-80"
+                loading="lazy"
+              />
+              <div className="relative z-10">
+                <p className="font-display text-[24px] font-semibold tracking-[0.03em]">Speakers</p>
+                <p className="mt-2 font-sans text-[14px] leading-[21px] opacity-90">
                   Amazon wireless speakers
                 </p>
                 <Link
                   to="/products"
-                  className="mt-3 inline-flex font-sans text-title-16 underline underline-offset-8"
+                  className="mt-3 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium"
+                >
+                  Shop Now
+                </Link>
+              </div>
+            </div>
+            <div className="relative flex min-h-[284px] flex-col justify-end overflow-hidden rounded-control bg-top p-6 text-fg-inverse">
+              <img
+                src="https://www.figma.com/api/mcp/asset/52480fcb-f348-4096-8344-342c4a983fc6"
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover opacity-80"
+                loading="lazy"
+              />
+              <div className="relative z-10">
+                <p className="font-display text-[24px] font-semibold tracking-[0.03em]">Perfume</p>
+                <p className="mt-2 font-sans text-[14px] leading-[21px] opacity-90">GUCCI INTENSE OUD EDP</p>
+                <Link
+                  to="/products"
+                  className="mt-3 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium"
                 >
                   Shop Now
                 </Link>
