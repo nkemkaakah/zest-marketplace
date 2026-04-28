@@ -28,7 +28,7 @@ export function SiteHeader(): ReactElement {
 
   return (
     <header className="w-full bg-surface" data-name="Header">
-      <div className="mx-auto flex w-full flex-col gap-6 px-4 pt-12 pb-6 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-0 tablet:px-  lg:px-12 xl:px-28">
+      <div className="mx-auto flex w-full flex-col gap-6 px-4 pt-12 pb-6 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-0 tablet:px-  lg:px-site ">
         <div className="flex gap-6 md:flex-row tablet:items-start tablet:gap-10 xl:gap-28">
           <Link
             className="font-display text-logo-24 font-bold tracking-logo text-fg"

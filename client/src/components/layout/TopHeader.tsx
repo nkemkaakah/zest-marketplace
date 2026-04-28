@@ -1,11 +1,11 @@
 import type { ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
+import { LanguageDropdown } from "./LanguageDropdown";
 
 export function TopHeader(): ReactElement {
   return (
     <div
-      className="flex h-top-bar w-full items-center justify-center bg-top px-4 text-top-text"
+      className="flex h-auto w-full items-center justify-center bg-top px-1 ,d:px-4 text-top-text"
       data-name="Top Header"
     >
       <div className="mx-auto flex w-full items-center justify-between gap-4 text-title-14 tablet:gap-header-gap">
@@ -22,12 +22,7 @@ export function TopHeader(): ReactElement {
         </p>
         </div>
         
-        <div className="flex items-center gap-1 font-sans font-normal">
-          <span>English</span>
-          <span className="inline-flex size-6 items-center justify-center" aria-hidden>
-            <ChevronDown className="size-4" strokeWidth={2} />
-          </span>
-        </div>
+        <LanguageDropdown />
       </div>
     </div>
   );
