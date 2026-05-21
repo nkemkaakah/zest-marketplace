@@ -74,7 +74,7 @@ function PaginationLink({
   if (disabled) {
     return (
       <span
-        className="inline-flex min-w-10 items-center justify-center rounded-control border border-border-subtle px-3 py-2 font-sans text-title-14 text-fg opacity-40"
+        className="inline-flex min-w-10 cursor-not-allowed items-center justify-center rounded-control border border-border-subtle px-3 py-2 font-sans text-title-14 text-fg opacity-40"
         aria-disabled="true"
         aria-label={ariaLabel}
       >
@@ -85,7 +85,7 @@ function PaginationLink({
   return (
     <Link
       className={[
-        "inline-flex min-w-10 items-center justify-center rounded-control border px-3 py-2 font-sans text-title-14 transition",
+        "inline-flex min-w-10 items-center justify-center rounded-control border px-3 py-2 font-sans text-title-14 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg focus-visible:ring-offset-1",
         active
           ? "border-fg bg-fg text-fg-inverse"
           : "border-border-subtle text-fg hover:border-fg",

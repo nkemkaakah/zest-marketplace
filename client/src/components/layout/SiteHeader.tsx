@@ -15,7 +15,7 @@ import { useCartStore } from "@/store/cartStore";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }): string =>
   [
-    "font-sans text-title-16 text-fg",
+    "font-sans text-title-16 text-fg transition-opacity hover:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg focus-visible:ring-offset-2 rounded-sm",
     isActive ? "relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:bg-fg after:opacity-50" : "",
   ].join(" ");
 
@@ -80,7 +80,7 @@ export function SiteHeader(): ReactElement {
         </div>
         <div className="relative flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:gap-actions-gap">
           <form
-            className="flex min-h-search-min w-full items-center rounded-control bg-surface-muted pl-5 pr-3 py-2 tablet:w-64 desktop:w-80"
+            className="flex min-h-search-min w-full items-center rounded-control bg-surface-muted pl-5 pr-3 py-2 transition-shadow focus-within:ring-2 focus-within:ring-fg tablet:w-64 desktop:w-80"
             onSubmit={onSearchSubmit}
             role="search"
           >
@@ -93,7 +93,7 @@ export function SiteHeader(): ReactElement {
             />
             <button
               type="submit"
-              className="inline-flex size-icon-hit shrink-0 items-center justify-center text-fg"
+              className="inline-flex size-icon-hit shrink-0 items-center justify-center text-fg transition-opacity hover:opacity-60 focus-visible:outline-none"
               aria-label="Submit search"
             >
               <Search className="size-6" strokeWidth={1.75} />
@@ -101,14 +101,14 @@ export function SiteHeader(): ReactElement {
           </form>
           <div className="flex items-center justify-end gap-4">
             <Link
-              className="relative inline-flex size-icon-hit items-center justify-center text-fg"
+              className="relative inline-flex size-icon-hit items-center justify-center text-fg transition-opacity hover:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg focus-visible:ring-offset-2 rounded-sm"
               to="/wishlist"
               aria-label="Wishlist"
             >
               <Heart className="size-7" strokeWidth={1.5} />
             </Link>
             <Link
-              className="relative inline-flex size-icon-hit items-center justify-center text-fg"
+              className="relative inline-flex size-icon-hit items-center justify-center text-fg transition-opacity hover:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg focus-visible:ring-offset-2 rounded-sm"
               to="/cart"
               aria-label="Shopping cart"
             >
@@ -122,7 +122,7 @@ export function SiteHeader(): ReactElement {
             {isSignedIn ? (
               <button
                 type="button"
-                className="inline-flex size-8 items-center justify-center rounded-full bg-sale text-fg-inverse"
+                className="inline-flex size-8 items-center justify-center rounded-full bg-sale text-fg-inverse transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg focus-visible:ring-offset-2"
                 aria-expanded={isAccountMenuOpen}
                 aria-haspopup="menu"
                 aria-label="Account menu"
@@ -141,25 +141,25 @@ export function SiteHeader(): ReactElement {
               aria-label="Account actions"
             >
               <div className="flex flex-col gap-[13px] font-sans text-title-14">
-                <Link className="flex items-center gap-4" role="menuitem" to="/account">
+                <Link className="flex items-center gap-4 transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:opacity-70" role="menuitem" to="/account">
                   <UserRound className="size-8" strokeWidth={1.5} />
                   <span>Manage My Account</span>
                 </Link>
-                <Link className="flex items-center gap-4" role="menuitem" to="/account#orders">
+                <Link className="flex items-center gap-4 transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:opacity-70" role="menuitem" to="/account#orders">
                   <ShoppingBag className="size-6" strokeWidth={1.5} />
                   <span>My Order</span>
                 </Link>
-                <Link className="flex items-center gap-4" role="menuitem" to="/account#cancellations">
+                <Link className="flex items-center gap-4 transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:opacity-70" role="menuitem" to="/account#cancellations">
                   <CircleX className="size-6" strokeWidth={1.5} />
                   <span>My Cancellations</span>
                 </Link>
-                <Link className="flex items-center gap-4" role="menuitem" to="/account#reviews">
+                <Link className="flex items-center gap-4 transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:opacity-70" role="menuitem" to="/account#reviews">
                   <Star className="size-6" strokeWidth={1.5} />
                   <span>My Reviews</span>
                 </Link>
                 <button
                   type="button"
-                  className="flex items-center gap-4 text-left"
+                  className="flex items-center gap-4 text-left transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:opacity-70"
                   role="menuitem"
                   onClick={() => {
                     void onLogoutClick();

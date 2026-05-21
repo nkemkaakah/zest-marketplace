@@ -50,19 +50,19 @@ export function SiteFooter(): ReactElement {
           <p>+88015-88888-9999</p>
         </FooterColumn>
         <FooterColumn title="Account">
-          <Link className="hover:underline" to="/account">
+          <Link className="transition-opacity hover:opacity-70 hover:underline focus-visible:outline-none focus-visible:opacity-70" to="/account">
             My Account
           </Link>
-          <Link className="hover:underline" to="/login">
+          <Link className="transition-opacity hover:opacity-70 hover:underline focus-visible:outline-none focus-visible:opacity-70" to="/login">
             Login / Register
           </Link>
-          <Link className="hover:underline" to="/cart">
+          <Link className="transition-opacity hover:opacity-70 hover:underline focus-visible:outline-none focus-visible:opacity-70" to="/cart">
             Cart
           </Link>
-          <Link className="hover:underline" to="/wishlist">
+          <Link className="transition-opacity hover:opacity-70 hover:underline focus-visible:outline-none focus-visible:opacity-70" to="/wishlist">
             Wishlist
           </Link>
-          <Link className="hover:underline" to="/products">
+          <Link className="transition-opacity hover:opacity-70 hover:underline focus-visible:outline-none focus-visible:opacity-70" to="/products">
             Shop
           </Link>
         </FooterColumn>
@@ -70,7 +70,7 @@ export function SiteFooter(): ReactElement {
           <span className="opacity-80">Privacy Policy</span>
           <span className="opacity-80">Terms Of Use</span>
           <span className="opacity-80">FAQ</span>
-          <Link className="hover:underline" to="/contact">
+          <Link className="transition-opacity hover:opacity-70 hover:underline focus-visible:outline-none focus-visible:opacity-70" to="/contact">
             Contact
           </Link>
         </FooterColumn>
@@ -96,10 +96,18 @@ export function SiteFooter(): ReactElement {
             </div>
           </div>
           <div className="mt-2 flex gap-6">
-            <Facebook className="size-6" strokeWidth={1.25} aria-hidden />
-            <Twitter className="size-6" strokeWidth={1.25} aria-hidden />
-            <Instagram className="size-6" strokeWidth={1.25} aria-hidden />
-            <Linkedin className="size-6" strokeWidth={1.25} aria-hidden />
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="transition-opacity hover:opacity-60 focus-visible:outline-none focus-visible:opacity-60">
+              <Facebook className="size-6" strokeWidth={1.25} />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="transition-opacity hover:opacity-60 focus-visible:outline-none focus-visible:opacity-60">
+              <Twitter className="size-6" strokeWidth={1.25} />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="transition-opacity hover:opacity-60 focus-visible:outline-none focus-visible:opacity-60">
+              <Instagram className="size-6" strokeWidth={1.25} />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="transition-opacity hover:opacity-60 focus-visible:outline-none focus-visible:opacity-60">
+              <Linkedin className="size-6" strokeWidth={1.25} />
+            </a>
           </div>
         </div>
       </div>

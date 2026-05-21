@@ -7,8 +7,8 @@ const variants: Record<Variant, string> = {
     "bg-fg text-fg-inverse hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50",
   secondary:
     "border border-hairline border-fg bg-transparent text-fg hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50",
-  ghost: "bg-transparent text-fg hover:bg-surface-muted",
-  danger: "bg-sale text-fg-inverse hover:opacity-90",
+  ghost: "bg-transparent text-fg hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50",
+  danger: "bg-sale text-fg-inverse hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50",
   /** Figma primary actions (cart apply coupon, checkout, flash CTAs) */
   sale:
     "bg-sale font-medium text-fg-inverse hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50",
@@ -32,7 +32,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={`inline-flex items-center justify-center rounded-control px-8 py-3 font-sans text-title-16 transition ${variants[variant]} ${className}`}
+      className={`inline-flex items-center justify-center rounded-control px-8 py-3 font-sans text-title-16 transition active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg focus-visible:ring-offset-2 ${variants[variant]} ${className}`}
       {...rest}
     >
       {children}

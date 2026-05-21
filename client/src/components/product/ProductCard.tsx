@@ -45,10 +45,10 @@ export function ProductCard({
             -{discount}%
           </span>
         ) : null}
-        <div className="absolute right-3 top-3 z-10 flex flex-col gap-2 opacity-0 transition group-hover:opacity-100 tablet:opacity-100">
+        <div className="absolute right-3 top-3 z-10 flex flex-col gap-2 opacity-0 transition duration-200 group-hover:opacity-100 tablet:opacity-100">
           <button
             type="button"
-            className="inline-flex size-9 items-center justify-center rounded-full bg-surface text-fg shadow"
+            className="inline-flex size-9 items-center justify-center rounded-full bg-surface text-fg shadow transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg active:scale-[0.93]"
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
             onClick={() => {
               toggleWishlist(product);
@@ -62,7 +62,7 @@ export function ProductCard({
           </button>
           <button
             type="button"
-            className="inline-flex size-9 items-center justify-center rounded-full bg-surface text-fg shadow"
+            className="inline-flex size-9 items-center justify-center rounded-full bg-surface text-fg shadow transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg active:scale-[0.93]"
             aria-label="Add to cart"
             onClick={() => {
               void addToCart(product, 1);

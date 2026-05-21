@@ -31,7 +31,7 @@ export function CartQuantityControl({
       <div className="flex w-7 flex-col border-l border-hairline border-border-strong">
         <button
           type="button"
-          className="flex flex-1 items-center justify-center text-fg hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex flex-1 items-center justify-center text-fg transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-1 focus-visible:ring-fg disabled:cursor-not-allowed disabled:opacity-40"
           disabled={value >= max}
           aria-label="Increase quantity"
           onClick={() => {
@@ -42,7 +42,7 @@ export function CartQuantityControl({
         </button>
         <button
           type="button"
-          className="flex flex-1 items-center justify-center border-t border-hairline border-border-strong text-fg hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex flex-1 items-center justify-center border-t border-hairline border-border-strong text-fg transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-1 focus-visible:ring-fg disabled:cursor-not-allowed disabled:opacity-40"
           disabled={value <= min}
           aria-label="Decrease quantity"
           onClick={() => {
