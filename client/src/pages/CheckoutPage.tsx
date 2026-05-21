@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/Button";
 import { CouponApplyRow } from "@/components/ui/CouponApplyRow";
 import { Field } from "@/components/ui/Input";
 import { useCartStore } from "@/store/cartStore";
+import { createOrder, type Order } from "@/services/orders";
+import { ApiError } from "@/services/http";
 import { formatPrice } from "@/utils/formatPrice";
 
 interface FieldErrors {
@@ -23,21 +25,12 @@ function validate(values: {
   email: string;
 }): FieldErrors {
   const errors: FieldErrors = {};
-  if (values.firstName.trim().length < 2) {
-    errors.firstName = "First name is required.";
-  }
-  if (values.street.trim().length < 4) {
-    errors.street = "Street address is required.";
-  }
-  if (values.city.trim().length < 2) {
-    errors.city = "Town/City is required.";
-  }
-  if (values.phone.trim().length < 6) {
-    errors.phone = "Phone number is required.";
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+  if (values.firstName.trim().length < 2) errors.firstName = "First name is required.";
+  if (values.street.trim().length < 4) errors.street = "Street address is required.";
+  if (values.city.trim().length < 2) errors.city = "Town/City is required.";
+  if (values.phone.trim().length < 6) errors.phone = "Phone number is required.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()))
     errors.email = "Valid email is required.";
-  }
   return errors;
 }
 
@@ -45,7 +38,6 @@ const formId = "checkout-billing-form";
 
 export default function CheckoutPage(): ReactElement {
   const lines = useCartStore((s) => s.lines);
-  const clear = useCartStore((s) => s.clear);
   const [firstName, setFirstName] = useState("");
   const [company, setCompany] = useState("");
   const [street, setStreet] = useState("");
@@ -56,25 +48,49 @@ export default function CheckoutPage(): ReactElement {
   const [saveInfo, setSaveInfo] = useState(false);
   const [payment, setPayment] = useState<"bank" | "cod">("cod");
   const [errors, setErrors] = useState<FieldErrors>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [confirmedOrder, setConfirmedOrder] = useState<Order | null>(null);
 
   const subtotal = useMemo(
     () => lines.reduce((sum, l) => sum + l.product.price * l.quantity, 0),
     [lines],
   );
 
-  function onSubmit(e: FormEvent<HTMLFormElement>): void {
+  async function onSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     const next = validate({ firstName, street, city, phone, email });
     setErrors(next);
-    if (Object.keys(next).length > 0) {
-      return;
+    if (Object.keys(next).length > 0) return;
+
+    setSubmitting(true);
+    setApiError(null);
+    try {
+      const order = await createOrder({
+        firstName,
+        company: company.trim() || undefined,
+        street,
+        apartment: apartment.trim() || undefined,
+        city,
+        phone,
+        email,
+        paymentMethod: payment,
+      });
+      setConfirmedOrder(order);
+    } catch (e) {
+      const message =
+        e instanceof ApiError
+          ? e.message
+          : e instanceof Error
+            ? e.message
+            : "Something went wrong. Please try again.";
+      setApiError(message);
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitted(true);
-    clear();
   }
 
-  if (lines.length === 0 && !submitted) {
+  if (lines.length === 0 && !confirmedOrder) {
     return (
       <div className="mx-auto w-full max-w-site px-4 py-16 md:px-8 lg:px-0">
         <p className="font-sans text-title-16 text-fg opacity-80">Your cart is empty.</p>
@@ -85,16 +101,29 @@ export default function CheckoutPage(): ReactElement {
     );
   }
 
-  if (submitted) {
+  if (confirmedOrder) {
     return (
-      <div className="mx-auto w-full  px-4 py-16 md:px-8 lg:px-0">
-        <h1 className="font-display text-heading-36 text-fg">Thank you</h1>
+      <div className="mx-auto w-full px-4 py-16 md:px-8 lg:px-site">
+        <h1 className="font-display text-heading-36 text-fg">Order confirmed!</h1>
         <p className="mt-4 max-w-xl font-sans text-title-16 text-fg opacity-80">
-          Your order has been recorded. Payment integration with the Zest SDK can be wired here
-          next — this is a development placeholder after successful validation.
+          Thank you, {confirmedOrder.customerFirstName}. Your order{" "}
+          <span className="font-medium text-fg opacity-100">
+            #{confirmedOrder.id.slice(0, 8).toUpperCase()}
+          </span>{" "}
+          has been placed and payment processed successfully.
         </p>
+        <div className="mt-8 w-full max-w-md rounded-control border border-border-subtle bg-surface p-6 shadow-card">
+          <div className="flex items-center justify-between font-sans text-title-16 text-fg">
+            <span>Total paid</span>
+            <span className="font-medium">{formatPrice(confirmedOrder.total)}</span>
+          </div>
+          <div className="mt-2 flex items-center justify-between font-sans text-title-14 text-fg opacity-60">
+            <span>Reference</span>
+            <span className="font-mono">{confirmedOrder.paymentReference}</span>
+          </div>
+        </div>
         <Link className="mt-8 inline-block font-sans text-title-16 underline" to="/">
-          Back to home
+          Continue shopping
         </Link>
       </div>
     );
@@ -114,11 +143,22 @@ export default function CheckoutPage(): ReactElement {
       />
       <h1 className="mt-8 font-display text-heading-billing text-fg">Billing Details</h1>
 
+      {apiError ? (
+        <p
+          className="mt-6 rounded-md border border-sale bg-sale-surface px-4 py-3 font-sans text-title-16 text-sale"
+          role="alert"
+        >
+          {apiError}
+        </p>
+      ) : null}
+
       <div className="mt-10 flex flex-col gap-12 xl:grid xl:grid-cols-[470px_527px] xl:items-start xl:justify-between xl:gap-10">
         <form
           id={formId}
           className="flex w-full max-w-billing flex-col gap-8 xl:max-w-none"
-          onSubmit={onSubmit}
+          onSubmit={(e) => {
+            void onSubmit(e);
+          }}
           noValidate
         >
           <Field
@@ -127,9 +167,7 @@ export default function CheckoutPage(): ReactElement {
             label="First Name"
             name="firstName"
             value={firstName}
-            onChange={(e) => {
-              setFirstName(e.target.value);
-            }}
+            onChange={(e) => { setFirstName(e.target.value); }}
             autoComplete="given-name"
             error={errors.firstName}
           />
@@ -138,9 +176,7 @@ export default function CheckoutPage(): ReactElement {
             label="Company Name"
             name="company"
             value={company}
-            onChange={(e) => {
-              setCompany(e.target.value);
-            }}
+            onChange={(e) => { setCompany(e.target.value); }}
             autoComplete="organization"
           />
           <Field
@@ -149,9 +185,7 @@ export default function CheckoutPage(): ReactElement {
             label="Street Address"
             name="street"
             value={street}
-            onChange={(e) => {
-              setStreet(e.target.value);
-            }}
+            onChange={(e) => { setStreet(e.target.value); }}
             autoComplete="street-address"
             error={errors.street}
           />
@@ -160,9 +194,7 @@ export default function CheckoutPage(): ReactElement {
             label="Apartment, floor, etc. (optional)"
             name="apartment"
             value={apartment}
-            onChange={(e) => {
-              setApartment(e.target.value);
-            }}
+            onChange={(e) => { setApartment(e.target.value); }}
           />
           <Field
             appearance="checkout"
@@ -170,9 +202,7 @@ export default function CheckoutPage(): ReactElement {
             label="Town/City"
             name="city"
             value={city}
-            onChange={(e) => {
-              setCity(e.target.value);
-            }}
+            onChange={(e) => { setCity(e.target.value); }}
             autoComplete="address-level2"
             error={errors.city}
           />
@@ -183,9 +213,7 @@ export default function CheckoutPage(): ReactElement {
             name="phone"
             type="tel"
             value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value);
-            }}
+            onChange={(e) => { setPhone(e.target.value); }}
             autoComplete="tel"
             error={errors.phone}
           />
@@ -196,9 +224,7 @@ export default function CheckoutPage(): ReactElement {
             name="email"
             type="email"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
+            onChange={(e) => { setEmail(e.target.value); }}
             autoComplete="email"
             error={errors.email}
           />
@@ -206,9 +232,7 @@ export default function CheckoutPage(): ReactElement {
             <input
               type="checkbox"
               checked={saveInfo}
-              onChange={(e) => {
-                setSaveInfo(e.target.checked);
-              }}
+              onChange={(e) => { setSaveInfo(e.target.checked); }}
               className="mt-0.5 size-6 shrink-0 cursor-pointer rounded-control accent-sale"
             />
             <span>Save this information for faster check-out next time</span>
@@ -227,7 +251,9 @@ export default function CheckoutPage(): ReactElement {
                 />
                 <div className="flex min-w-0 flex-1 items-center justify-between gap-4 font-sans text-title-16 text-fg">
                   <span className="truncate">{line.product.name}</span>
-                  <span className="shrink-0">{formatPrice(line.product.price * line.quantity)}</span>
+                  <span className="shrink-0">
+                    {formatPrice(line.product.price * line.quantity)}
+                  </span>
                 </div>
               </div>
             ))}
@@ -257,9 +283,7 @@ export default function CheckoutPage(): ReactElement {
                   type="radio"
                   name="payment"
                   checked={payment === "bank"}
-                  onChange={() => {
-                    setPayment("bank");
-                  }}
+                  onChange={() => { setPayment("bank"); }}
                   className="size-6 accent-sale"
                 />
                 <span>Bank</span>
@@ -296,9 +320,7 @@ export default function CheckoutPage(): ReactElement {
                 type="radio"
                 name="payment"
                 checked={payment === "cod"}
-                onChange={() => {
-                  setPayment("cod");
-                }}
+                onChange={() => { setPayment("cod"); }}
                 className="size-6 accent-sale"
               />
               <span>Cash on delivery</span>
@@ -311,9 +333,10 @@ export default function CheckoutPage(): ReactElement {
             type="submit"
             form={formId}
             variant="sale"
+            disabled={submitting}
             className="w-full px-12 py-4 sm:w-auto xl:min-w-[190px]"
           >
-            Place Order
+            {submitting ? "Placing order…" : "Place Order"}
           </Button>
         </div>
       </div>

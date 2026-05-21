@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { X } from "lucide-react";
 import { CartQuantityControl } from "@/components/cart/CartQuantityControl";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import { Button } from "@/components/ui/Button";
 import { CouponApplyRow } from "@/components/ui/CouponApplyRow";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice } from "@/utils/formatPrice";
@@ -80,7 +79,7 @@ export default function CartPage(): ReactElement {
                         type="button"
                         className="mt-0.5 shrink-0 text-sale hover:opacity-80"
                         aria-label={`Remove ${line.product.name}`}
-                        onClick={() => { remove(line.productId); }}
+                        onClick={() => { void remove(line.productId); }}
                       >
                         <X className="size-5" strokeWidth={1.5} />
                       </button>
@@ -108,7 +107,7 @@ export default function CartPage(): ReactElement {
                             min={1}
                             max={line.product.stock}
                             label={`Quantity for ${line.product.name}`}
-                            onChange={(n) => { setQuantity(line.productId, n); }}
+                            onChange={(n) => { void setQuantity(line.productId, n); }}
                           />
                           <span className="font-sans text-title-16 font-medium text-fg">
                             {formatPrice(line.product.price * line.quantity)}
@@ -130,7 +129,7 @@ export default function CartPage(): ReactElement {
                         type="button"
                         className="text-sale hover:opacity-80"
                         aria-label={`Remove ${line.product.name}`}
-                        onClick={() => { remove(line.productId); }}
+                        onClick={() => { void remove(line.productId); }}
                       >
                         <X className="size-5" strokeWidth={1.5} />
                       </button>
@@ -158,7 +157,7 @@ export default function CartPage(): ReactElement {
                         min={1}
                         max={line.product.stock}
                         label={`Quantity for ${line.product.name}`}
-                        onChange={(n) => { setQuantity(line.productId, n); }}
+                        onChange={(n) => { void setQuantity(line.productId, n); }}
                       />
                       <p className="font-sans text-title-16 text-fg">
                         {formatPrice(line.product.price * line.quantity)}
@@ -177,13 +176,12 @@ export default function CartPage(): ReactElement {
               >
                 Return To Shop
               </Link>
-              <Button
-                type="button"
-                variant="outline-muted"
-                className="w-full px-8 py-3.5 tablet:w-auto"
+              <Link
+                to="/products"
+                className="inline-flex w-full items-center justify-center rounded-control border border-hairline border-fg/50 bg-transparent px-8 py-3.5 font-sans text-title-16 text-fg transition hover:bg-surface-muted tablet:w-auto"
               >
-                Update Cart
-              </Button>
+                Continue Shopping
+              </Link>
             </div>
           </div>
 
@@ -217,7 +215,7 @@ export default function CartPage(): ReactElement {
                 to="/checkout"
                 className="mt-6 flex w-full items-center justify-center rounded-control bg-sale px-8 py-4 font-sans text-title-16 font-medium text-fg-inverse transition hover:opacity-90"
               >
-                Procees to checkout
+                Proceed to checkout
               </Link>
             </aside>
           </div>

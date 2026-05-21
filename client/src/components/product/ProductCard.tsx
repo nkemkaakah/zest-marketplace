@@ -65,7 +65,7 @@ export function ProductCard({
             className="inline-flex size-9 items-center justify-center rounded-full bg-surface text-fg shadow"
             aria-label="Add to cart"
             onClick={() => {
-              addToCart(product, 1);
+              void addToCart(product, 1);
             }}
           >
             <ShoppingCart className="size-5" strokeWidth={1.75} />

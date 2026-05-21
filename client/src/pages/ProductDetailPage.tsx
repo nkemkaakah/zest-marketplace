@@ -226,7 +226,7 @@ function ProductDetailView({ product, related }: ProductDetailViewProps): ReactE
               variant="sale"
               disabled={!inStock}
               className="px-12 py-[10px]"
-              onClick={() => { addToCart(product, qty); }}
+              onClick={() => { void addToCart(product, qty); }}
             >
               Buy Now
             </Button>
