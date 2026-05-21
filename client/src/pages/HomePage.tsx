@@ -20,6 +20,7 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { fetchProducts, type FetchProductsParams } from "@/services/products";
 import type { Product } from "@/types/product";
 import { ApiError } from "@/services/http";
+import { figmaAssets } from "@/assets/figmaMcpAssets";
 
 /** Labels aligned with `server` product categories for filter links. */
 const categories = [
@@ -186,7 +187,7 @@ export default function HomePage(): ReactElement {
               <Link
                 key={label}
                 to={`/products?category=${encodeURIComponent(label)}`}
-                className={`flex items-center font-sans text-[16px] font-normal leading-6 text-fg xl:text-[17px] ${
+                className={`flex items-center font-sans text-[16px] font-normal leading-6 text-fg transition-opacity hover:opacity-60 focus-visible:outline-none focus-visible:opacity-60 xl:text-[17px] ${
                   withChevron ? "justify-between" : ""
                 }`}
               >
@@ -205,7 +206,7 @@ export default function HomePage(): ReactElement {
 
         <div className="relative h-[344px] w-full  overflow-hidden bg-top text-fg-inverse xl:h-[380px] 2xl:h-[420px]">
           <img
-            src="https://www.figma.com/api/mcp/asset/b4ce37ff-c4f8-432f-8c02-387182eb435e"
+            src={figmaAssets.home.heroIphone}
             alt=""
             className="absolute left-[44.39%] top-[4.65%] h-[102.33%] w-[55.61%] max-w-none object-contain"
             loading="lazy"
@@ -213,7 +214,7 @@ export default function HomePage(): ReactElement {
 
           <div className="absolute left-[7.18%] top-[16.86%] flex items-center gap-4 xl:gap-6">
             <img
-              src="https://www.figma.com/api/mcp/asset/ee93f019-4014-4eea-a893-78e2b69cdffc"
+              src={figmaAssets.home.appleLogo}
               alt=""
               className="h-9 w-[30px] xl:h-[49px] xl:w-10"
               loading="lazy"
@@ -229,7 +230,7 @@ export default function HomePage(): ReactElement {
 
           <Link
             to="/products"
-            className="absolute left-[10%] top-[70%] inline-flex items-center gap-2 font-sans text-[16px] font-medium leading-6 text-fg-inverse"
+            className="absolute left-[10%] top-[70%] inline-flex items-center gap-2 font-sans text-[16px] font-medium leading-6 text-fg-inverse transition-opacity hover:opacity-75 focus-visible:outline-none focus-visible:opacity-75"
           >
             <span className="inline-flex border-b border-fg-inverse pb-0.5">Shop Now</span>
             <ArrowRight className="size-6" strokeWidth={1.75} aria-hidden />
@@ -273,14 +274,14 @@ export default function HomePage(): ReactElement {
             <button
               type="button"
               aria-label="Previous categories"
-              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg"
+              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg transition-colors hover:bg-fg hover:text-fg-inverse focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg active:scale-[0.95]"
             >
               <ArrowLeft className="size-6" strokeWidth={1.75} />
             </button>
             <button
               type="button"
               aria-label="Next categories"
-              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg"
+              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg transition-colors hover:bg-fg hover:text-fg-inverse focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg active:scale-[0.95]"
             >
               <ArrowRight className="size-6" strokeWidth={1.75} />
             </button>
@@ -291,10 +292,10 @@ export default function HomePage(): ReactElement {
             <Link
               key={label}
               to={to}
-              className={`flex h-[145px] min-w-0 flex-col items-center justify-center gap-4 rounded-control border text-center transition ${
+              className={`flex h-[145px] min-w-0 flex-col items-center justify-center gap-4 rounded-control border text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg ${
                 label === "Camera"
                   ? "border-transparent bg-sale text-fg-inverse shadow-card"
-                  : "border-border-subtle bg-surface text-fg hover:border-fg/50"
+                  : "border-border-subtle bg-surface text-fg hover:border-fg/50 hover:scale-[1.03] active:scale-[0.98]"
               }`}
             >
               <Icon className="size-14" strokeWidth={1.5} />
@@ -317,7 +318,7 @@ export default function HomePage(): ReactElement {
           </div>
           <Link
             to="/products?sort=price-desc"
-            className="inline-flex h-14 items-center justify-center rounded-control bg-sale px-12 font-sans text-[16px] font-medium text-fg-inverse"
+            className="inline-flex h-14 items-center justify-center rounded-control bg-sale px-12 font-sans text-[16px] font-medium text-fg-inverse transition-opacity hover:opacity-85 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg focus-visible:ring-offset-2"
           >
             View All
           </Link>
@@ -329,7 +330,7 @@ export default function HomePage(): ReactElement {
         <div className="relative h-[500px] w-full overflow-hidden bg-top">
           <div className="absolute left-[47.18%] top-0 h-full w-[43.08%]">
             <img
-              src="https://www.figma.com/api/mcp/asset/dae8638d-3956-45dc-8a3f-94561a57ca44"
+              src={figmaAssets.home.musicGlow}
               alt=""
               className="h-full w-full scale-[1.4] object-cover opacity-70"
               loading="lazy"
@@ -358,14 +359,14 @@ export default function HomePage(): ReactElement {
             </div>
             <button
               type="button"
-              className="inline-flex h-14 items-center justify-center rounded-control bg-[#00FF66] px-12 font-sans text-[16px] font-medium leading-6 text-fg-inverse"
+              className="inline-flex h-14 items-center justify-center rounded-control bg-[#00FF66] px-12 font-sans text-[16px] font-medium leading-6 text-fg-inverse transition-opacity hover:opacity-85 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               Buy Now!
             </button>
           </div>
           <div className="absolute left-[44.96%] top-[7.4%] h-[420px] w-[51.28%] overflow-hidden">
             <img
-              src="https://www.figma.com/api/mcp/asset/ec14b19d-7d9a-4012-bd72-045d54b4df5f"
+              src={figmaAssets.home.musicJbl}
               alt=""
               className="h-full w-full object-contain"
               loading="lazy"
@@ -389,14 +390,14 @@ export default function HomePage(): ReactElement {
             <button
               type="button"
               aria-label="Previous products"
-              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg"
+              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg transition-colors hover:bg-fg hover:text-fg-inverse focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg active:scale-[0.95]"
             >
               <ArrowLeft className="size-6" strokeWidth={1.75} />
             </button>
             <button
               type="button"
               aria-label="Next products"
-              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg"
+              className="inline-flex size-[46px] items-center justify-center rounded-full bg-surface-muted text-fg transition-colors hover:bg-fg hover:text-fg-inverse focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg active:scale-[0.95]"
             >
               <ArrowRight className="size-6" strokeWidth={1.75} />
             </button>
@@ -406,7 +407,7 @@ export default function HomePage(): ReactElement {
         <div className="flex justify-center">
           <Link
             to="/products"
-            className="inline-flex h-14 items-center justify-center rounded-control bg-sale px-12 font-sans text-[16px] font-medium text-fg-inverse"
+            className="inline-flex h-14 items-center justify-center rounded-control bg-sale px-12 font-sans text-[16px] font-medium text-fg-inverse transition-opacity hover:opacity-85 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg focus-visible:ring-offset-2"
           >
             View All Products
           </Link>
@@ -426,7 +427,7 @@ export default function HomePage(): ReactElement {
         <div className="grid grid-cols-1 gap-[30px] lg:grid-cols-2">
           <div className="relative flex min-h-[600px] flex-col justify-end overflow-hidden rounded-control bg-top p-8">
             <img
-              src="https://www.figma.com/api/mcp/asset/593d5abf-3ba8-44a2-902f-bc1d7e37d68a"
+              src={figmaAssets.home.ps5}
               alt=""
               className="absolute inset-0 h-full w-full object-cover"
               loading="lazy"
@@ -438,7 +439,7 @@ export default function HomePage(): ReactElement {
               </p>
               <Link
                 to="/products/havit-hv-g92-gamepad"
-                className="mt-4 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium"
+                className="mt-4 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:opacity-70"
               >
                 Shop Now
               </Link>
@@ -447,7 +448,7 @@ export default function HomePage(): ReactElement {
           <div className="grid grid-cols-1 gap-[32px] sm:grid-cols-2">
             <div className="relative col-span-full flex min-h-[284px] flex-col justify-end overflow-hidden rounded-control bg-top p-6 text-fg-inverse">
               <img
-                src="https://www.figma.com/api/mcp/asset/1bec77fe-72e7-4dda-9705-89acc41b6b68"
+                src={figmaAssets.home.womensCollection}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover opacity-80"
                 loading="lazy"
@@ -459,7 +460,7 @@ export default function HomePage(): ReactElement {
                 </p>
                 <Link
                   to={`/products?category=${encodeURIComponent("Women's Fashion")}`}
-                  className="mt-4 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium"
+                  className="mt-4 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:opacity-70"
                 >
                   Shop Now
                 </Link>
@@ -467,7 +468,7 @@ export default function HomePage(): ReactElement {
             </div>
             <div className="relative flex min-h-[284px] flex-col justify-end overflow-hidden rounded-control bg-top p-6 text-fg-inverse">
               <img
-                src="https://www.figma.com/api/mcp/asset/cc2c49d4-63f3-4920-ad27-4b5ac314cd8e"
+                src={figmaAssets.home.speakers}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover opacity-80"
                 loading="lazy"
@@ -479,7 +480,7 @@ export default function HomePage(): ReactElement {
                 </p>
                 <Link
                   to="/products"
-                  className="mt-3 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium"
+                  className="mt-3 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:opacity-70"
                 >
                   Shop Now
                 </Link>
@@ -487,7 +488,7 @@ export default function HomePage(): ReactElement {
             </div>
             <div className="relative flex min-h-[284px] flex-col justify-end overflow-hidden rounded-control bg-top p-6 text-fg-inverse">
               <img
-                src="https://www.figma.com/api/mcp/asset/52480fcb-f348-4096-8344-342c4a983fc6"
+                src={figmaAssets.home.perfume}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover opacity-80"
                 loading="lazy"
@@ -497,7 +498,7 @@ export default function HomePage(): ReactElement {
                 <p className="mt-2 font-sans text-[14px] leading-[21px] opacity-90">GUCCI INTENSE OUD EDP</p>
                 <Link
                   to="/products"
-                  className="mt-3 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium"
+                  className="mt-3 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:opacity-70"
                 >
                   Shop Now
                 </Link>

@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { figmaAssets } from "@/assets/figmaMcpAssets";
 import { Instagram, Linkedin, Truck, Twitter } from "lucide-react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
@@ -30,7 +31,7 @@ export default function AboutPage(): ReactElement {
         </div>
         <div className="h-[609px] overflow-hidden rounded-l-control bg-[#EB7EA8]">
           <img
-            src="https://www.figma.com/api/mcp/asset/78f3f1d6-d8e6-467e-b6ce-a40410b97a66"
+            src={figmaAssets.about.hero}
             alt=""
             className="h-full w-full object-cover"
             loading="lazy"
@@ -80,17 +81,17 @@ export default function AboutPage(): ReactElement {
             {
               name: "Tom Cruise",
               role: "Founder & Chairman",
-              image: "https://www.figma.com/api/mcp/asset/f3ebd23c-10a2-450f-a426-9d60fd0d7a20",
+              image: figmaAssets.about.tomCruise,
             },
             {
               name: "Emma Watson",
               role: "Managing Director",
-              image: "https://www.figma.com/api/mcp/asset/2e541333-595a-45cb-83e5-e4c7fe5d4d54",
+              image: figmaAssets.about.emmaWatson,
             },
             {
               name: "Will Smith",
               role: "Product Designer",
-              image: "https://www.figma.com/api/mcp/asset/4e374372-5e47-4c7a-9c2e-621bc7cedfa6",
+              image: figmaAssets.about.willSmith,
             },
           ].map((member) => (
             <article key={member.name}>

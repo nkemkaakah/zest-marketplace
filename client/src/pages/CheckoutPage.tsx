@@ -7,6 +7,7 @@ import { Field } from "@/components/ui/Input";
 import { useCartStore } from "@/store/cartStore";
 import { createOrder, type Order } from "@/services/orders";
 import { ApiError } from "@/services/http";
+import { figmaAssets } from "@/assets/figmaMcpAssets";
 import { formatPrice } from "@/utils/formatPrice";
 
 interface FieldErrors {
@@ -290,25 +291,25 @@ export default function CheckoutPage(): ReactElement {
               </label>
               <div className="flex items-center gap-2 opacity-90">
                 <img
-                  src="https://www.figma.com/api/mcp/asset/55bea2b5-bc9d-434f-a969-426e739b609b"
+                  src={figmaAssets.checkout.bkash}
                   alt="Bkash"
                   className="h-7 w-[42px] object-contain"
                   loading="lazy"
                 />
                 <img
-                  src="https://www.figma.com/api/mcp/asset/f0792f04-fe6a-436b-a233-49a8263ddf58"
+                  src={figmaAssets.checkout.visa}
                   alt="Visa"
                   className="h-7 w-[42px] object-contain"
                   loading="lazy"
                 />
                 <img
-                  src="https://www.figma.com/api/mcp/asset/828023e4-ef22-4e6b-ab63-781254b48d5d"
+                  src={figmaAssets.checkout.mastercard}
                   alt="Mastercard"
                   className="h-7 w-[42px] object-contain"
                   loading="lazy"
                 />
                 <img
-                  src="https://www.figma.com/api/mcp/asset/cb1b3284-7e9b-4488-9ee0-6364d9adcdad"
+                  src={figmaAssets.checkout.nagad}
                   alt="Nagad"
                   className="h-7 w-[42px] object-contain"
                   loading="lazy"

@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type ReactElement } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store";
+import { figmaAssets } from "@/assets/figmaMcpAssets";
 import { Button } from "@/components/ui/Button";
 
 export default function LoginPage(): ReactElement {
@@ -31,7 +32,7 @@ export default function LoginPage(): ReactElement {
       <div className="flex w-full flex-col gap-10 lg:flex-row lg:items-stretch">
         <div className="hidden h-[781px] overflow-hidden rounded-r-control bg-[#CBE4E8] lg:block lg:basis-[55%]">
           <img
-            src="https://www.figma.com/api/mcp/asset/4b48b727-f830-489d-a417-5a9057cdc7f7"
+            src={figmaAssets.auth.sideImage}
             alt=""
             className="h-full w-full object-cover"
             loading="lazy"

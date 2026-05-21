@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type ReactElement } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store";
+import { figmaAssets } from "@/assets/figmaMcpAssets";
 import { Button } from "@/components/ui/Button";
 
 export default function SignupPage(): ReactElement {
@@ -30,7 +31,7 @@ export default function SignupPage(): ReactElement {
       <div className="flex w-full flex-col gap-10 lg:flex-row lg:items-stretch">
         <div className="hidden h-[781px] overflow-hidden rounded-r-control bg-[#CBE4E8] lg:block lg:basis-[55%]">
           <img
-            src="https://www.figma.com/api/mcp/asset/6b4591ee-2c70-48e2-8a00-78d0f3979da5"
+            src={figmaAssets.signup.sideImage}
             alt=""
             className="h-full w-full object-cover"
             loading="lazy"

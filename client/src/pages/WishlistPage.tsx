@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { useCartStore } from "@/store/cartStore";
 import { useWishlistStore } from "@/store/wishlistStore";
 import type { Product } from "@/types/product";
+import { figmaAssets } from "@/assets/figmaMcpAssets";
 import { formatPrice } from "@/utils/formatPrice";
 
 const dummyWishlistProducts: Product[] = [
@@ -18,7 +19,7 @@ const dummyWishlistProducts: Product[] = [
     stock: 10,
     rating: 4.8,
     reviewCount: 65,
-    imageUrl: "https://www.figma.com/api/mcp/asset/ab981bb6-c169-40f1-8fd9-d8ffbce22239",
+    imageUrl: figmaAssets.wishlist.gucciDuffle,
     isFlashSale: true,
   },
   {
@@ -32,7 +33,7 @@ const dummyWishlistProducts: Product[] = [
     stock: 10,
     rating: 4.8,
     reviewCount: 65,
-    imageUrl: "https://www.figma.com/api/mcp/asset/c3876940-2f1a-4f63-ad35-81681d655471",
+    imageUrl: figmaAssets.wishlist.rgbCooler,
     isFlashSale: false,
   },
   {
@@ -46,7 +47,7 @@ const dummyWishlistProducts: Product[] = [
     stock: 10,
     rating: 4.8,
     reviewCount: 65,
-    imageUrl: "https://www.figma.com/api/mcp/asset/b1c1ecd6-6a3a-436e-a31e-711ecee0f45a",
+    imageUrl: figmaAssets.wishlist.gp11Gamepad,
     isFlashSale: false,
   },
   {
@@ -60,7 +61,7 @@ const dummyWishlistProducts: Product[] = [
     stock: 10,
     rating: 4.8,
     reviewCount: 65,
-    imageUrl: "https://www.figma.com/api/mcp/asset/a876036c-4fb7-4ff1-bbde-eabd6028e870",
+    imageUrl: figmaAssets.wishlist.satinJacket,
     isFlashSale: false,
   },
 ];
@@ -72,7 +73,7 @@ const recommendations = [
     price: 960,
     compareAtPrice: 1160,
     ratingCount: 65,
-    imageUrl: "https://www.figma.com/api/mcp/asset/e2dede34-c498-4bcf-90d5-c3d7eed44f65",
+    imageUrl: figmaAssets.wishlist.asusLaptop,
     badge: "-35%",
   },
   {
@@ -80,14 +81,14 @@ const recommendations = [
     name: "IPS LCD Gaming Monitor",
     price: 1160,
     ratingCount: 65,
-    imageUrl: "https://www.figma.com/api/mcp/asset/1ce7ba63-631d-4688-83cd-fa3e65239da8",
+    imageUrl: figmaAssets.wishlist.gamingMonitor,
   },
   {
     id: "rec-g92",
     name: "HAVIT HV-G92 Gamepad",
     price: 560,
     ratingCount: 65,
-    imageUrl: "https://www.figma.com/api/mcp/asset/200f9e08-10a1-45a2-8bdf-09aa17179d53",
+    imageUrl: figmaAssets.wishlist.havitGamepad,
     badge: "NEW",
   },
   {
@@ -95,7 +96,7 @@ const recommendations = [
     name: "AK-900 Wired Keyboard",
     price: 200,
     ratingCount: 65,
-    imageUrl: "https://www.figma.com/api/mcp/asset/53ac4dfd-ac98-4f41-bb90-86c42f846359",
+    imageUrl: figmaAssets.wishlist.ak900Keyboard,
   },
 ];
 

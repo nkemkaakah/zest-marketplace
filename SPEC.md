@@ -4,7 +4,7 @@
 
 Build a fully functional, production-grade e-commerce web application that accurately implements the provided Figma design. This project evaluates frontend engineering skills across code quality, architecture, scalability, API integration, and payment processing.
 
-**Figma Design:** [Full E-Commerce Website UI/UX Design](https://www.figma.com/design/cGxcEgBdExnwK7WEsIHRH5/Full-E-Commerce-Website-UI-UX-Design--Community-?node-id=1-3&p=f)
+**Figma Design:** [Full E-Commerce Website UI/UX Design (Copy)](https://www.figma.com/design/DQt7HK12DNJbK7dMoB1ju7/Full-E-Commerce-Website-UI-UX-Design--Community---Copy-?node-id=1-3&p=f)
 
 ***
 
