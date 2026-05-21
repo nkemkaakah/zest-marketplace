@@ -67,6 +67,47 @@ The spec asks for a justified choice (Context + `useReducer`, Zustand, Redux Too
 - **Zest payment SDK** — Env placeholders only; integration comes in a later milestone.
 - **Design** — UI tokens and layouts should follow the Figma linked in `SPEC.md`; the current shell is a neutral scaffold.
 
-## Deployment
+## Deployment (Vercel)
 
-Target: Vercel/Netlify for the client, Railway/Render/DigitalOcean for the server. Set `VITE_API_URL` in the frontend environment to the public API URL and configure `CORS_ORIGIN` on the server for the deployed site.
+Use **two Vercel projects** from this repo (npm workspaces monorepo), each with its own **Root Directory**. Both `vercel.json` files run `npm install` from the repo root so the shared lockfile is used.
+
+| Project | Root directory | Config |
+|--------|----------------|--------|
+| Client | `client` | `client/vercel.json` — Vite build, SPA rewrites |
+| Server | `server` | `server/vercel.json` — Express via `server/api/index.ts` |
+
+### 1. Deploy the server
+
+1. Import the repo → set **Root Directory** to `server`.
+2. Add environment variables (Production, and Preview if you use preview URLs):
+
+   | Variable | Example |
+   |----------|---------|
+   | `SUPABASE_URL` | `https://xxxx.supabase.co` |
+   | `SUPABASE_SERVICE_ROLE_KEY` | from Supabase dashboard |
+   | `SUPABASE_ANON_KEY` | from Supabase dashboard |
+   | `CORS_ORIGIN` | `https://your-client.vercel.app` (comma-separate multiple origins) |
+
+3. Deploy. Note the deployment URL, e.g. `https://zest-api.vercel.app`.
+
+Local dev still uses `npm run dev` in `server` (or root `npm run dev`); production uses the serverless entry in `api/index.ts`.
+
+### 2. Deploy the client
+
+1. New Vercel project → **Root Directory** `client`.
+2. Set **Production** (and **Preview** if needed) env:
+
+   | Variable | Value |
+   |----------|--------|
+   | `VITE_API_URL` | Server URL from step 1, **no trailing slash** (e.g. `https://zest-api.vercel.app`) |
+
+3. Deploy. The app calls `VITE_API_URL` + `/api/...` (see `client/src/services/config.ts`).
+
+### 3. Wire CORS
+
+After the client is live, set `CORS_ORIGIN` on the **server** project to the client URL(s). For preview deployments, add preview client URLs (comma-separated) or use separate Preview env values in Vercel.
+
+### Verify
+
+- `GET https://<server>/api/health` should return JSON.
+- Open the client site; the home page health check should succeed when `VITE_API_URL` and `CORS_ORIGIN` match.

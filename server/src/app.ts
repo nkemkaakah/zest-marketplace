@@ -7,11 +7,29 @@ import { apiRouter } from "./routes/index.js";
 
 export const app = express();
 
-const corsOrigin = process.env.CORS_ORIGIN ?? "http://localhost:5173";
+const defaultOrigins = ["http://localhost:5173"];
+
+function getCorsOrigins(): string[] {
+  const raw = process.env.CORS_ORIGIN;
+  if (!raw) {
+    return defaultOrigins;
+  }
+  return raw
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0);
+}
 
 app.use(
   cors({
-    origin: corsOrigin,
+    origin(origin, callback) {
+      const allowed = getCorsOrigins();
+      if (!origin || allowed.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(null, false);
+    },
     credentials: true,
   }),
 );
