@@ -437,7 +437,7 @@ export default function HomePage(): ReactElement {
                 Black and White version of the PS5 coming out on sale.
               </p>
               <Link
-                to="/products/1"
+                to="/products/havit-hv-g92-gamepad"
                 className="mt-4 inline-flex border-b border-fg-inverse pb-0.5 font-sans text-[16px] font-medium"
               >
                 Shop Now
